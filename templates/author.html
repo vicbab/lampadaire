@@ -1,0 +1,27 @@
+
+<html>
+	<head>
+		<link href="/static/css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		{% include "header.html" %}
+
+<h1><a href="{{author['author']['surname']}}-{{author['author']['forname']}}.html">{{author['author']['surname']}}, {{author['author']['forname']}} 
+		{%if author['author']['affiliations'] %} 
+		, Affiliation: {{author['author']['affiliations']}}
+		{%endif%} 
+		{%if author['author']['orcid']%} 
+		, ORCID: 
+		{{author['author']['orcid']}}
+		{%endif%}
+	</a></h1>
+
+	{%if author['author']['biography'] %}<p>{{author['author']['biography']|safe}}</p>{%endif%}
+Liste articles:
+<ul>
+{% for a in author['articles'] %}
+<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
+{% endfor%}
+</ul>
+	</body>
+</html>

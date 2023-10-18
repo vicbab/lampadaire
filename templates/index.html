@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<link href="/static/css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		{% include "header.html" %}
+<h1>{{title}}</h1>
+
+<a href="motscles/index.html">Mots-clés</a>
+<a href="dossiers/index.html">Dossiers</a>
+
+<ul>
+{%for i in data%}
+<li>{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a href="articles/{{i['myid']}}.html">{%endif%}{{i['title']|safe}}</a></li>
+
+
+{%endfor%}
+</ul>
+
+<body>
+</html>

@@ -1,0 +1,23 @@
+<html>
+	<head>
+		<link href="../static/css/style.css" rel="stylesheet">
+	</head>
+	<body>
+		{% include "header.html" %}
+
+<h1>Dossiers</h1>
+
+{% for d in data %}
+
+<h2><a href="{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></h2>
+Liste articles:
+<ul>
+{% for a in d['articles'] %}
+<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
+{% endfor%}
+</ul>
+{%endfor%}
+
+
+	</body>
+</html>

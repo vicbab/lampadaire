@@ -1,0 +1,288 @@
+import requests
+import json
+import config
+import yaml
+import re
+import pypandoc
+import zipfile, io
+from slugify import slugify
+
+endpoint = "https://stylo.huma-num.fr/graphql"
+headers = {"Authorization": f"Bearer {config.accessToken}"}
+
+
+# une fonction pour transformer le yaml en json car je suis plus à l'aise
+def yamltojs(myyaml):
+    sourcesyaml = yaml.load_all(myyaml, Loader=yaml.Loader)
+    sourcesjs=[]
+    for source in sourcesyaml:
+        sourcesjs.append(source)
+    return sourcesjs
+
+# fonction pour récuperer les données d'un article à partir de son id yaml
+def idfrommyid(myid):
+
+    id=myid #cela permet de faire fonctionner l'application avec les id stylo. dans ce cas la fonction returnera id=myid
+    if config.dynamic:
+        la = retrievetags()
+    else:
+        la = json.load(open('caches/articles.json','r'))
+    for i in la:
+        try:
+            myart = i['myid']
+
+            if myart == myid:
+                id = i['id']
+        except:
+            continue
+    
+    if config.dynamic:
+        data=retrievearticle(id)
+    else:
+        data = ""
+        for i in la:
+            if i['myid'] == myid:
+                data = {'data':{'article':i}}
+        if data == "": # si l'article n'a pas d'id yaml
+          for i in la:
+            if i['id'] == myid:
+                data = {'data':{'article':i}}
+
+    yaml = yamltojs(data['data']['article']['workingVersion']['yaml'])[0]
+    try:
+        latestversion= data['data']['article']['versions'][0]['_id']
+    except:
+        latestversion=""
+    try:
+        myid_def = re.split("_", yamltojs(data['data']['article']['workingVersion']['yaml'])[0]['id'])[0]
+    except:
+        myid_def=''
+    return [data, myid_def, yaml, id,latestversion]    
+
+def getartinfofromyaml(article,key):
+    try:
+        value = yamltojs(article['workingVersion']['yaml'])[0][key]
+    except:
+        value = ''
+    return value
+
+
+# fonction pour récuperer le pdf via l'export stylo. Si on crée un export pour femur, on pourra avoir un template particulier et récuperer aussi l'xml
+def getpdf(article, myid, version):
+    print("getting "+article)
+    url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    params = {
+                "with_toc": 0,
+                "with_ascii": 0,
+                "version": version,
+                "bibliography_style": "chicagomodified",
+                "formats": "pdf",
+                }
+    r = requests.get(url,params)
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    print(z.filelist)
+    z.extractall("downloads")
+        
+def getxml(article, myid, version):
+    print("getting "+article)
+    url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    params = {
+                "with_toc": 0,
+                "with_ascii": 0,
+                "version": version,
+                "bibliography_style": "chicagomodified",
+                "formats": "xml-tei-metopes-1",
+                }
+    r = requests.get(url,params)
+    z = zipfile.ZipFile(io.BytesIO(r.content))
+    print(z.filelist)
+    z.extractall("downloads")
+
+def retrievetags():
+    query = """
+    
+    {
+      
+        
+          articles{_id title workingVersion{yaml} tags{name} }
+          
+          
+        
+      }
+    
+    
+    """
+    
+    r = requests.post(endpoint, json={"query": query}, headers=headers)
+    if r.status_code == 200:
+        articlesdata = r.json()['data']['articles']
+        tagName = config.tagName
+        articles=[]
+        for article in articlesdata:
+            try:  
+                for tag in article['tags']:
+                    if tag['name'] == tagName:
+                        titledoc=article['title']
+                        idart= article['_id'] 
+                        yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        myid=re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        try:
+                            title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
+                        except:
+                            title = article['title']
+                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
+                        if dictart not in articles:
+                            articles.append(dictart)
+            except:
+                continue
+     
+        return articles
+    else:
+        raise Exception(f"Query failed to run with a {r.status_code}.")
+
+def retrievearticle(article):
+    query = '{article(article:"'+article+'"){_id title contributors{user{displayName}} workingVersion{md yaml bib}versions{_id} }}'
+
+
+    r = requests.post(endpoint, json={"query": query}, headers=headers)
+    if r.status_code == 200:
+        data = r.json()
+        data.update({'myid':getartinfofromyaml(data['data']['article'],'id')})
+        return data
+    else:
+        raise Exception(f"Query failed to run with a {r.status_code}.")
+
+def retrievekeywords():
+    key_fr=[]
+    data = retrievetags()
+    for article in data:
+        article_id = article['id']
+        myid = article['myid']
+        try:
+           keywords = article['yaml']['keywords']
+           for k in keywords:
+               if k['lang'] == 'fr':
+                   for kf in k['list_f']:
+                       try:
+                           title=article['title']
+                       except:
+                           title=''
+                       articles_list={'myid':myid, 'id':article_id, 'title':title}
+                       nameslug=slugify(kf)
+                       dictkey = {'name': kf, 'nameslug':nameslug,'articles': articles_list}
+
+                       key_fr.append(dictkey)
+        except:
+            continue
+                
+    return key_fr
+
+def retrievedossiers():
+    dossiers=[]
+    for article in retrievetags():
+        article_id = article['id']
+        myid = article['myid']
+        dossier = article['yaml']['dossier']
+        title= article['title']
+        articles_list={'myid':myid,'id':article_id, 'title':title}
+        dictdossier = {'dossier': dossier[0], 'articles': articles_list}
+        dossiers.append(dictdossier)
+                        
+     
+    return dossiers
+
+def retrieveauthors():
+    authors_list=[]
+    for article in retrievetags():
+        article_id = article['id']
+        myid = article['myid']
+        try:
+            authors = article['yaml']['authors']
+            for author in authors:
+                title= article['title']
+                articles_list={'myid':myid,'id':article_id, 'title':title}
+                authornslug = slugify(author['surname'])
+                authorfslug = slugify(author['forname'])
+                authorslug= authornslug+'-'+authorfslug
+                dictauthor = {'author': author, 'authorslug':authorslug, 'articles': articles_list}
+                authors_list.append(dictauthor)
+        except:
+            continue
+
+     
+    return authors_list
+
+
+   #une fonction pour enlever tous les doublons et mettre les articles de chaque mot-clé dans une liste. Avant, la fonction retrievekeywords() fait une liste de dictionnaires avec tous les mots-clés et les articles liés, mais avec répetitions, par ex: [{'name':'portrait', 'article':1},{'name':'portrait', 'article':2}]. La fonction qui suit transforme en:  [{'name':'portrait', 'article':[1,2]}]
+def setkeywords():
+    keywords = retrievekeywords()
+    sansdoublons= set([k['name'] for k in keywords])
+    liste_sd=[]        
+    for name in sansdoublons:
+        dictk = {'name':name}
+        lista=[]
+        for kw in keywords:
+            if kw['name']== name:
+                lista.append(kw['articles'])
+                dictk.update({'nameslug':kw['nameslug']})
+        dictk.update({'articles':lista })        
+        liste_sd.append(dictk)    
+    return liste_sd    
+def setdossiers():
+    dossiers = retrievedossiers()
+    dossierssorted = sorted(dossiers, key=lambda k: k['dossier']['id']) 
+    seen = []
+    new_l = []
+    for d in dossierssorted:
+        if d['dossier']['id'] not in seen:
+            if d['dossier']['id'] == '':
+                continue
+            else:
+                seen.append(d['dossier']['id'])
+                new_l.append(d['dossier'])
+
+    liste_dict_dossiers= []
+    for d in new_l:
+        liste_sd = []        
+        dictd={'dossier':d}
+        for i in dossierssorted:
+            if i['dossier']['id'] == d['id']:
+                liste_sd.append(i['articles'])
+        liste_sd = sorted(liste_sd, key=lambda k: k['myid']) 
+        dictd.update({'articles':liste_sd})        
+        liste_dict_dossiers.append(dictd)    
+    return liste_dict_dossiers    
+
+
+def setauthors():
+    authors = retrieveauthors()
+    authorssorted = sorted(authors, key=lambda k: k['author']['surname']) 
+    seen = []
+    new_l = []
+    for a in authorssorted:
+        if (a['author']['forname'], a['author']['surname']) not in seen: ## attention: ça marche pas s'il y a des homonimes (même nom, même prénom)
+            seen.append((a['author']['forname'], a['author']['surname']))
+            new_l.append(a['author'])
+
+    liste_dict_authors= []
+    for a in new_l:
+        liste_sd = []        
+        dicta={'author':a}
+        for i in authorssorted:
+            if i['author']['forname'] == a['forname'] and i['author']['surname'] == a['surname']:
+                liste_sd.append(i['articles'])
+                dicta.update({'authorslug': i['authorslug']})
+                try: 
+                    bio = pypandoc.convert_text(i['author']['biography'], 'html', format='md') 
+                    
+                        
+                    a.update({'biography':bio})    
+
+
+
+                except KeyError:
+                    continue
+        liste_sd = sorted(liste_sd, key=lambda k: k['myid']) 
+        dicta.update({'articles':liste_sd})        
+        liste_dict_authors.append(dicta)    
+    return liste_dict_authors    
