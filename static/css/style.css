@@ -81,6 +81,8 @@ ul.menu {
   padding-top: 14px;
   background-color: #00A450; */
   text-align: center;
+  padding-left: 0;
+  list-style: inside;
 }
 .menu > li {
   display: inline-block;
@@ -94,13 +96,11 @@ ul.menu {
   position: relative;
   color: #000
 }
-
-.logoA {
+.menu > li:hover {
   background-color: #00A450;
 }
 
 .menuA {
-  background-color: #00A450;
   text-align: center;
 }
 
@@ -108,7 +108,6 @@ img.menuA {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: #00A450;
 }
 
 ul.menuA {
@@ -116,6 +115,8 @@ ul.menuA {
   padding-top: 14px;
   background-color: #00A450; */
   text-align: center;
+  padding-left: 0;
+  list-style: inside;
 }
 .menuA > li {
   display: inline-block;
@@ -128,4 +129,8 @@ ul.menuA {
   /* vertical-align: middle; */
   position: relative;
   color: #000
+}
+
+.menuA > li:hover {
+  background-color: #FFEDD2;
 }
