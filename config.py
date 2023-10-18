@@ -6,8 +6,8 @@ accessToken=myToken
 endpoint = "https://stylo.huma-num.fr/graphql"
 
 
-title = 'Revue de Photolittérature'
+title = 'Revue Lampadaire'
 
-tagName = 'phlit-revue'
+tagName = 'lampadaire'
 
-dynamic = False # si False, on utilise les fonctions de retrivearticles
+dynamic = True # si False, on utilise les fonctions de retrivearticles

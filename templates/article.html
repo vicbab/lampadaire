@@ -6,11 +6,12 @@
 		{% include "header.html" %}
 
 		<div class="article">
-<h1>{{title|safe}} {{myid}}</h1>
+<!-- <h1>{{title|safe}} {{myid}}</h1> -->
+<h1>{{title|safe}}</h1>
 {%for a in authors%}<a href="../authors/{{a.authorslug}}.html">{{a.forname}} {{a.surname}}
        
 		{%if a['affiliations'] %} 
-		, Affiliation: {{a['affiliations']}}
+		, {{a['affiliations']}}
 		{%endif%} 
 		{%if a['orcid']%} 
 		, ORCID: 
@@ -22,7 +23,7 @@
  <p>		<span>Date: {{yaml['date']}}</span></p>
  <p>{{yaml['rights']}}</p>
 
- <p>		<span>Mots-clés: {% for k in yaml['keywords'] %}{%for n in k['list_f'] %} <a href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %}
+ <p>		<span><b>Mots-clés:</b> {% for k in yaml['keywords'] %}{%for n in k['list_f'] %} <a href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %}
     ,
     {% endif %} {%endfor%}{%endfor%} </span></p>
 
