@@ -25,9 +25,18 @@ def homepage(): # la fonction qui sert les données pour la route /
         data = json.load(open('caches/articles.json','r'))
     return render_template('index.html', title=config.title, data=data)
 
+@app.route('/contribuer') # route où seront servies ces données
+def contribuer(): # la fonction qui sert les données pour la route /
+    page = "static/pages/contribuer.md"
+    contenu = pypandoc.convert_file(page, 'html', format='md')
+
+    return render_template('contribuer.html', title=config.title, contenu=contenu)
+
 @app.route('/a-propos') # route où seront servies ces données
 def aboutpage(): # la fonction qui sert les données pour la route /
-    return render_template('a-propos.html', title="à propos - revue lampadaire")
+    page = "static/pages/a-propos.md"
+    contenu = pypandoc.convert_file(page, 'html', format='md')
+    return render_template('a-propos.html', title="à propos - revue lampadaire", contenu = contenu)
 
 @app.route('/appels') # route où seront servies ces données
 def appels(): # la fonction qui sert les données pour la route /
