@@ -24,7 +24,7 @@ def idfrommyid(myid):
 
     id=myid #cela permet de faire fonctionner l'application avec les id stylo. dans ce cas la fonction returnera id=myid
     if config.dynamic:
-        la = retrievetags()
+        la = retrievetags("article")
     else:
         la = json.load(open('caches/articles.json','r'))
     for i in la:
@@ -37,7 +37,7 @@ def idfrommyid(myid):
             continue
     
     if config.dynamic:
-        data=retrievearticle(id)
+        data = retrievearticle(id)
     else:
         data = ""
         for i in la:
@@ -98,7 +98,7 @@ def getxml(article, myid, version):
     print(z.filelist)
     z.extractall("downloads")
 
-def retrievetags():
+def retrievetags(type):
     query = """
     
     {
@@ -116,7 +116,10 @@ def retrievetags():
     r = requests.post(endpoint, json={"query": query}, headers=headers)
     if r.status_code == 200:
         articlesdata = r.json()['data']['articles']
-        tagName = config.tagName
+        if type == "article":
+            tagName = config.tagName
+        elif type == "appel":
+            tagName = config.appelTag
         articles=[]
         for article in articlesdata:
             try:  
@@ -132,13 +135,57 @@ def retrievetags():
                             title = article['title']
                         dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
                         if dictart not in articles:
-                            articles.append(dictart)
+                            articles.append(dictart)                    
             except:
                 continue
      
         return articles
     else:
         raise Exception(f"Query failed to run with a {r.status_code}.")
+
+def makeAppels():
+    query = """
+    
+    {
+      
+        
+          articles{_id title workingVersion{yaml} tags{name} }
+          
+          
+        
+      }
+    
+    
+    """
+    
+    r = requests.post(endpoint, json={"query": query}, headers=headers)
+    if r.status_code == 200:
+        appelsdata = r.json()['data']['articles']
+        appelTag = config.appelTag
+        appels=[]
+        for appels in appelsdata:
+            try:  
+                for tag in article['tags']:
+                     if tag['name'] == appelTag:
+                        titledoc = article['title']
+                        idart = article['_id'] 
+                        yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        myid = re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        try:
+                            title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
+                        except:
+                            title = article['title']
+                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
+                        if dictart not in articles:
+                            appels.append(dictart)                   
+            except:
+                continue
+     
+        return appels
+    else:
+        raise Exception(f"Query failed to run with a {r.status_code}.")
+    
+   
 
 def retrievearticle(article):
     query = '{article(article:"'+article+'"){_id title contributors{user{displayName}} workingVersion{md yaml bib}versions{_id} }}'
@@ -154,7 +201,7 @@ def retrievearticle(article):
 
 def retrievekeywords():
     key_fr=[]
-    data = retrievetags()
+    data = retrievetags("article")
     for article in data:
         article_id = article['id']
         myid = article['myid']
@@ -179,7 +226,7 @@ def retrievekeywords():
 
 def retrievedossiers():
     dossiers=[]
-    for article in retrievetags():
+    for article in retrievetags("article"):
         article_id = article['id']
         myid = article['myid']
         dossier = article['yaml']['dossier']
@@ -193,7 +240,7 @@ def retrievedossiers():
 
 def retrieveauthors():
     authors_list=[]
-    for article in retrievetags():
+    for article in retrievetags("article"):
         article_id = article['id']
         myid = article['myid']
         try:

@@ -11,5 +11,6 @@ Liste articles:
 <li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
 {% endfor%}
 </ul>
+{% include "footer.html" %}
 	</body>
 </html>
