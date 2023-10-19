@@ -28,8 +28,7 @@
 		<p><b>Licence:</b> {{yaml['rights']}}</p>
 
 		<p> <span><b>Mots-clés:</b> {% for k in yaml['keywords'] %}{%for n in k['list_f'] %} <a
-					href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %}
-				,
+					href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %},
 				{% endif %} {%endfor%}{%endfor%} </span></p>
 
 
