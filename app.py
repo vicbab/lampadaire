@@ -176,6 +176,7 @@ def author(name):
         if a['authorslug'] == name:
             myauthor = a
     return render_template('author.html', author=myauthor)
+
 @app.route('/dossiers/index.html') # route où seront servies ces données
 def dossiers(): # la fonction qui sert les données pour la route /
     if config.dynamic:
