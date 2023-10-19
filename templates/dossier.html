@@ -6,7 +6,7 @@
 		{% include "header.html" %}
 <h1>{{mydossier['dossier']['title_f']}}</h1>
 
-Liste articles:
+<!-- Liste articles: -->
 <ul>
 {% for a in mydossier['articles'] %}
 <li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>

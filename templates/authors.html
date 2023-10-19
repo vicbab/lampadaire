@@ -18,7 +18,7 @@
 			{{a['author']['orcid']}}
 			{%endif%}
 		</a></h2>
-	Liste articles:
+	<!-- Liste articles: -->
 	<ul>
 		{% for art in a['articles'] %}
 		<li>{%if art['myid'] == ''%}<a href="../articles/{{art['id']}}.html">{%else%}<a

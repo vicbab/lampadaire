@@ -8,7 +8,7 @@
 
 {% for k in data %}
 <h2><a href="{{k['nameslug']}}.html">{{k['name']}}</a></h2>
-Liste articles:
+<!-- Liste articles: -->
 <ul>
 {% for a in k['articles'] %}
 <li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>

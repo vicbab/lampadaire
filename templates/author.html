@@ -17,7 +17,7 @@
 		</a></h1>
 
 	{%if author['author']['biography'] %}<p>{{author['author']['biography']|safe}}</p>{%endif%}
-	Liste articles:
+	<!-- Liste articles: -->
 	<ul>
 		{% for a in author['articles'] %}
 		<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
