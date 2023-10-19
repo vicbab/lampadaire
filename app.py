@@ -20,34 +20,26 @@ else:
 @app.route('/') # route où seront servies ces données
 def homepage(): # la fonction qui sert les données pour la route /
     if config.dynamic:
-        data = tools.retrievetags()
+        data = tools.retrievetags("article")
     else:
         data = json.load(open('caches/articles.json','r'))
     return render_template('index.html', title=config.title, data=data)
 
 @app.route('/a-propos') # route où seront servies ces données
 def aboutpage(): # la fonction qui sert les données pour la route /
-    if config.dynamic:
-        data = tools.retrievetags()
-    else:
-        data = json.load(open('caches/articles.json','r'))
-    return render_template('a-propos.html', title="à propos - revue lampadaire", data=data)
+    return render_template('a-propos.html', title="à propos - revue lampadaire")
 
 @app.route('/appels') # route où seront servies ces données
 def appels(): # la fonction qui sert les données pour la route /
     if config.dynamic:
-        data = tools.retrievetags()
+        data = tools.retrievetags("appel")
     else:
-        data = json.load(open('caches/articles.json','r'))
+        data = json.load(open('caches/appels.json','r'))
     return render_template('appels.html', title="appels de textes - revue lampadaire", data=data)
 
 @app.route('/contact') # route où seront servies ces données
 def contact(): # la fonction qui sert les données pour la route /
-    if config.dynamic:
-        data = tools.retrievetags()
-    else:
-        data = json.load(open('caches/articles.json','r'))
-    return render_template('contact.html', title="contact - revue lampadaire", data=data)
+    return render_template('contact.html', title="contact - revue lampadaire")
 
 @app.route('/articles/<myid>.html')
 def article(myid):

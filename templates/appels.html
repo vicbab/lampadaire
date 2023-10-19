@@ -9,57 +9,17 @@
 
 	<h1>appels de textes</h1>
 
-	<h2>Numéro 1: Philosophie et science-fiction</h2>
-	<p class="appels">Les possibilités offertes par la science-fiction sont sans limites et peuvent fournir un terrain
-		d’expérimentation inédit pour la philosophie. Avec ce numéro de lancement, nous souhaitons explorer l’intérêt de
-		la grande variété de perspectives offertes par les écrits de science-fiction pour les grandes questions de la
-		philosophie telles que le sens de la vie, l’éthique, notre rapport à la technologie, etc.
-		<br><br>
-		Les œuvres de science-fiction explorant des thématiques philosophiques sont nombreuses. Nous pouvons penser à
-		1984 de Georges Orwell et Le meilleur des mondes d’Aldous Huxley, deux histoires présentant des dystopies
-		devenues classiques pour leur caractère prémonitoire. Ces œuvres sont régulièrement citées dans des publications
-		philosophiques ou utilisées dans l’enseignement de la philosophie. La simple évocation de 1984 suffit
-		aujourd’hui pour critiquer certains comportements s’apparentant à du totalitarisme. Le roman Frankenstein de
-		Mary Shelley, publié en 1818, qui est souvent considéré comme la toute première œuvre de science-fiction, aborde
-		plusieurs thèmes philosophiques importants. En présentant un savant fou créant la vie à partir de cadavres, le
-		roman nous fait réfléchir sur ce qu’est la vie, mais aussi sur la responsabilité humaine face à ses capacités
-		techniques. En même temps, le monstre de Frankenstein nous permet d’explorer les effets de la solitude et de la
-		marginalisation sociale. Neuromancer de William Gibson, aujourd’hui considéré comme un classique du cyberpunk,
-		décrit un univers futuriste où la technologie a considérablement transformé la réalité. Les personnages sont
-		connectés à des réseaux virtuels et peuvent changer d'apparence et d'identité à volonté ce qui permet d’explorer
-		les implications de cette technologie sur la construction de l'identité personnelle et sur les limites de la
-		conscience humaine. L’intelligence artificielle y joue également un rôle central et permet de réfléchir à notre
-		relation avec celles-ci. Ces technologies futuristes étant maintenant à notre portée, ce type d’histoires permet
-		de mieux cerner leurs enjeux et dangers. Les exemples d’œuvres de science-fiction abordant des thématiques
-		philosophiques ne manquent pas.
-		<br><br>
-		À l’inverse, nous pouvons également trouver de nombreux philosophes dont les thèmes peuvent être liés à la
-		science-fiction. Par exemple, nous pouvons penser à l’hypothèse du malin génie de Descartes qui nous aurait
-		créés que pour nous tromper. Cette idée fut reprise par de nombreux auteurs dont Hilary Putnam qui proposa
-		l’expérience de pensée du cerveau dans une cuve en 1981. Comment peut-on confirmer que ce qui nous entoure est
-		bien réel ? Comment savoir que nous ne sommes pas dans un rêve ou un simple cerveau dans une cuve? Dans son
-		œuvre Simulacres et Simulation, Baudrillard précise une idée similaire en décrivant un monde où les images et
-		les informations sont devenues plus réelles que les objets réels, et où la réalité est devenue une simulation
-		d'elle-même. Il décrit comment la technologie moderne a tendance à masquer la réalité derrière des images et
-		comment cela affecte notre compréhension du monde. Il suggère que cela a tendance à réduire l'expérience humaine
-		à une simple expérience de surface, et à rendre les individus passifs face à leur propre existence. Les sœurs
-		Wachowski se sont largement inspirées de cette idée ainsi que du mythe de la caverne de Platon dans le film La
-		Matrice, sorti en 1999, allant jusqu’à demander aux acteurs de lire le livre de Baudrillard. Le film décrit un
-		univers où la réalité est en fait une simulation créée par des machines pour contrôler l'humanité. On retrouve
-		dans ce film de nombreuses idées philosophiques qui ont marqué le cinéma et nourrit toute une génération de
-		philosophes.
-		<br><br>
-		Il semble incontestable qu’il y ait une certaine porosité entre la philosophie et la science-fiction, l’un
-		nourrissant l’autre et inversement. Ce numéro de la revue se propose donc d'explorer les relations possibles
-		entre la science-fiction et la philosophie. Cette thématique ouvre grande la porte à de nombreux questionnements
-		: le fictif peut-il nous approcher de la vérité ? Peut-on concevoir une éthique vraiment universelle malgré les
-		possibles ? Quelles idées philosophiques mériteraient d’être explorées dans le cadre d’une œuvre de
-		science-fiction ? Que peuvent nous apprendre les œuvres de science-fiction ? Notons également que la section
-		Créative de la revue est ouverte à des textes de science-fiction explorant des thématiques philosophiques.
-		Espérons que ce premier numéro de Lampadaire encouragera un échange riche et constructif sur la science-fiction
-		et sa relation aux questions philosophiques.
-	</p>
-	{% include "footer.html" %}
+	<ul>
+		{%for i in data%}
+		<li>{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
+					href="articles/{{i['myid']}}.html">{%endif%}{{i['title']|safe}}</a></li>
+
+
+		{%endfor%}
+	</ul>
+
+
+		{% include "footer.html" %}
 </body>
 
 </html>
