@@ -1,32 +1,38 @@
 <html>
-	<head>
-		<link href="/static/css/style.css" rel="stylesheet">
-	</head>
-	<body class="accueil">
-		{% include "headerA.html" %}
-<!-- <h1>{{title}}</h1>
+
+<head>
+	<link href="/static/css/style.css" rel="stylesheet">
+</head>
+
+<body class="accueil">
+	{% include "headerA.html" %}
+	<!-- <h1>{{title}}</h1>
 -->
-<br>
-<!-- <h2>à propos</h2> -->
-<p class="accueil">
-	<em>Lampadaire</em> est la revue grand public de la <a href="laspq.org">Société de philosophie du Québec (SPQ)</a>.
-</p>
+	<br>
+	<!-- <h2>à propos</h2> -->
+	<p class="accueil">
+		<em>Lampadaire</em> est la revue grand public de la <a href="laspq.org">Société de philosophie du Québec
+			(SPQ)</a>.
+	</p>
 
 
-<!-- <a href="motscles/index.html">Mots-clés</a>
+	<!-- <a href="motscles/index.html">Mots-clés</a>
 <a href="dossiers/index.html">Dossiers</a> -->
 
-<br>
+	<br>
 
-<h2>articles récents</h2>
-<ul>
-{%for i in data%}
-<li>{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a href="articles/{{i['myid']}}.html">{%endif%}{{i['title']|safe}}</a></li>
+	<h2>Articles récents</h2>
+	<ul>
+		{%for i in data%}
+		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
+					href="articles/{{i['myid']}}.html">{%endif%} {{i['title']|safe}}</a></li>
 
 
-{%endfor%}
-</ul>
+		{%endfor%}
+	</ul>
 
-{% include "footer.html" %}
-<body>
+	{% include "footer.html" %}
+
+	<body>
+
 </html>

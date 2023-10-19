@@ -1,15 +1,17 @@
 <html>
-	<head>
-		<link href="../static/css/style.css" rel="stylesheet">
-	</head>
-	<body>
-		{% include "header.html" %}
 
-<h1>à propos</h1>
+<head>
+	<link href="../static/css/style.css" rel="stylesheet">
+</head>
 
-{{contenu|safe}}
+<body>
+	{% include "header.html" %}
 
-{% include "footer.html" %}
-	</body>
+	<h1>À propos</h1>
+
+	{{contenu|safe}}
+
+	{% include "footer.html" %}
+</body>
+
 </html>
-
