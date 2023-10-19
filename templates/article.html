@@ -1,44 +1,49 @@
 <html>
-	<head>
-		<link href="../static/css/style.css" rel="stylesheet">
-	</head>
-	<body>
-		{% include "header.html" %}
 
-		<div class="article">
-<!-- <h1>{{title|safe}} {{myid}}</h1> -->
-<h1>{{title|safe}}</h1>
-{%for a in authors%}<a href="../authors/{{a.authorslug}}.html">{{a.forname}} {{a.surname}}
-       
-		{%if a['affiliations'] %} 
-		, {{a['affiliations']}}
-		{%endif%} 
-		{%if a['orcid']%} 
-		, ORCID: 
-		{{a['orcid']}}
-		{%endif%}
+<head>
+	<link href="../static/css/style.css" rel="stylesheet">
+</head>
+
+<body>
+	{% include "header.html" %}
+
+	<div class="article">
+		<!-- <h1>{{title|safe}} {{myid}}</h1> -->
+		<h1>{{title|safe}}</h1>
+		{%for a in authors%}<a href="../authors/{{a.authorslug}}.html"><b>{{a.forname}} {{a.surname}}</b>{%if
+			a['affiliations']
+			%}, {{a['affiliations']}}{%endif%}
+			{%if a['orcid']%}<br>
+			<a href="https://orcid.org/{{a['orcid']}}">
+				<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
+					height="16" />
+				https://orcid.org/{{a['orcid']}}
+			</a>
+			{%endif%}
+			
+
+		</a>{%endfor%}
+
+		<p> <span><b>Date de publication:</b> {{yaml['date']}}</span></p>
+		<p><b>Licence:</b> {{yaml['rights']}}</p>
+
+		<p> <span><b>Mots-clés:</b> {% for k in yaml['keywords'] %}{%for n in k['list_f'] %} <a
+					href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %}
+				,
+				{% endif %} {%endfor%}{%endfor%} </span></p>
 
 
-	</a>{%endfor%}
- <p>		<span>Date: {{yaml['date']}}</span></p>
- <p>{{yaml['rights']}}</p>
-
- <p>		<span><b>Mots-clés:</b> {% for k in yaml['keywords'] %}{%for n in k['list_f'] %} <a href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %}
-    ,
-    {% endif %} {%endfor%}{%endfor%} </span></p>
-
-
-	 <h2><a href="../downloads/{{myid}}">PDF de l'article</a></h2>
-	 <h2><a href="../xml/{{myid}}">XML de l'article</a></h2>
+		<h2><a href="../downloads/{{myid}}">Télécharger un PDF de l'article</a></h2>
+		<!-- <h2><a href="../xml/{{myid}}">XML de l'article</a></h2> -->
 		<h2>Résumé</h2>
 		<p>{{abstract_fr}}</p>
-		<h2>Abstract</h2>
-		<p>{{abstract_en}}</p>
-		<p> Dossier: {{yaml['dossier']}}</p>
+		<!-- <h2>Abstract</h2>
+		<p>{{abstract_en}}</p> -->
+		<p><b>Cet article a été publié dans le cadre du dossier {{mydossier}}</b></p>
+		
+		{{myarticle|safe}}
 
+	</div>
+</body>
 
-{{myarticle|safe}}
-
-		</div>
-	</body>
 </html>
