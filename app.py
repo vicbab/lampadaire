@@ -102,7 +102,14 @@ def article(myid):
         authors = yaml['authors']
     except:
         authors = [{'forname':'','name':'','orcid':''}]
-    return render_template('article.html', myarticle=myarticle, data=data, yaml=yaml,title=title, abstract_fr=abstract_fr, abstract_en=abstract_en, authors=authors, myid=myid)
+    
+    try:
+        for d in yaml['dossier']:
+            mydossier = d['title_f']
+    except:
+        mydossier = ''
+
+    return render_template('article.html', myarticle=myarticle, data=data, yaml=yaml,title=title, abstract_fr=abstract_fr, abstract_en=abstract_en, authors=authors, myid=myid, mydossier=mydossier)
 
 @app.route('/downloads/<myid>')
 def articlepdf(myid):
