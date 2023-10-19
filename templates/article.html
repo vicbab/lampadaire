@@ -32,7 +32,7 @@
 				{% endif %} {%endfor%}{%endfor%} </span></p>
 
 
-		<h2><a href="../downloads/{{myid}}">Télécharger un PDF de l'article</a></h2>
+		<h3><a href="../downloads/{{myid}}"><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="none" stroke-width="1.5" viewBox="0 0 24 24" color="#000000"><path stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 20h12M12 4v12m0 0 3.5-3.5M12 16l-3.5-3.5"></path></svg> Télécharger en PDF</a></h3>
 		<!-- <h2><a href="../xml/{{myid}}">XML de l'article</a></h2> -->
 		<h2>Résumé</h2>
 		<p>{{abstract_fr}}</p>
@@ -43,6 +43,8 @@
 		{{myarticle|safe}}
 
 	</div>
+
+	{% include "footer.html" %}
 </body>
 
 </html>
