@@ -1,12 +1,51 @@
 body {
-  font-family: 'ColaborateRegular', Arial, sans-serif;
+  font-family: 'Inter';
   font-size: 14px;
   color: #000;
   width: 85%;
   margin-left: auto;
   margin-right: auto;
+  background-color: #FFEDD2;
   /* text-shadow: -1px -1px #e0e0e0; */
 }
+
+p.appels {
+  font-size: 16px;
+  
+}
+
+ /* Style inputs with type="text", select elements and textareas */
+ input[type=text], select, textarea {
+  width: 100%; /* Full width */
+  padding: 12px; /* Some padding */ 
+  border: 1px solid #00A450; /* Gray border */
+  border-radius: 4px; /* Rounded borders */
+  box-sizing: border-box; /* Make sure that padding and width stays in place */
+  margin-top: 6px; /* Add a top margin */
+  margin-bottom: 16px; /* Bottom margin */
+  resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+}
+
+/* Style the submit button with a specific background color etc */
+input[type=submit] {
+  background-color: #00A450;
+  color: #000;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+/* When moving the mouse over the submit button, add a darker green color */
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+/* Add a background color and some padding around the form */
+.container {
+  border-radius: 5px;
+  padding: 20px;
+} 
 
 a {
   text-decoration: none;
@@ -14,18 +53,20 @@ a {
 }
 
 .accueil {
-  font-size: 16px;
-  font-weight: bold;
-  text-align: justify;
-  background-color: #00A450;
+    background-color: #00A450;
+}
+
+p.accueil {
+  font-size: 24px;
+  font-weight:bold;
+  text-align: left;
+  line-height: 150%;
 }
 
 .logo {
-  background-color: #00A450;
 }
 
 .menu {
-  background-color: #00A450;
   text-align: center;
 }
 
@@ -33,7 +74,6 @@ img.menu {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: #00A450;
 }
 
 ul.menu {
@@ -41,6 +81,8 @@ ul.menu {
   padding-top: 14px;
   background-color: #00A450; */
   text-align: center;
+  padding-left: 0;
+  list-style: inside;
 }
 .menu > li {
   display: inline-block;
@@ -48,8 +90,47 @@ ul.menu {
   padding: 8px;
   margin-left: auto;
   margin-right: auto;
-  font-size: 16px;
+  font-size: 17px;
+  font-weight: bold;
   /* vertical-align: middle; */
   position: relative;
   color: #000
+}
+.menu > li:hover {
+  background-color: #00A450;
+}
+
+.menuA {
+  text-align: center;
+}
+
+img.menuA {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+ul.menuA {
+  /* margin-top: 0px;
+  padding-top: 14px;
+  background-color: #00A450; */
+  text-align: center;
+  padding-left: 0;
+  list-style: inside;
+}
+.menuA > li {
+  display: inline-block;
+  margin-top: 0px;
+  padding: 8px;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 17px;
+  font-weight: bold;
+  /* vertical-align: middle; */
+  position: relative;
+  color: #000
+}
+
+.menuA > li:hover {
+  background-color: #FFEDD2;
 }
