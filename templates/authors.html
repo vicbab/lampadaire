@@ -11,11 +11,7 @@
 
 	{% for a in data %}
 	<h2><a href="{{a['authorslug']}}.html">
-			{{a['author']['surname']}}, {{a['author']['forname']}}{%if a['author']['affiliations']%}, Affiliation:
-			{{a['author']['affiliations']}}
-			{%endif%}
-			{%if a['author']['orcid']%}, ORCID:
-			{{a['author']['orcid']}}
+			{{a['author']['surname']}}, {{a['author']['forname']}}{%if a['author']['affiliations']%} ({{a['author']['affiliations']}})
 			{%endif%}
 		</a></h2>
 	<!-- Liste articles: -->

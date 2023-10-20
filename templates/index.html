@@ -25,7 +25,7 @@
 	<ul>
 		{%for i in data%}
 		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
-					href="articles/{{i['myid']}}.html">{%endif%} {{i['title']|safe}}</a></li>
+					href="articles/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></li>
 
 
 		{%endfor%}

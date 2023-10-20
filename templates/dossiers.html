@@ -1,23 +1,34 @@
 <html>
-	<head>
-		<link href="../static/css/style.css" rel="stylesheet">
-	</head>
-	<body>
-		{% include "header.html" %}
 
-<h1>Numéros</h1>
+<head>
+	<link href="../static/css/style.css" rel="stylesheet">
+</head>
 
-{% for d in data %}
+<body>
+	{% include "header.html" %}
 
-<h2><a href="{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></h2>
-<!-- Liste articles: -->
-<ul>
-{% for a in d['articles'] %}
-<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
-{% endfor%}
-</ul>
-{%endfor%}
+	<h1>Numéros</h1>
 
-{% include "footer.html" %}
-	</body>
+	{% for d in data %}
+
+	<h2><a href="{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></h2>
+	<!-- Liste articles: -->
+	<ul>
+		{% for a in d['articles'] %}
+		<li>{%if a['myid'] == ''%}
+			<a href="../articles/{{a['id']}}.html">
+				{%else%}
+				{%endif%}
+
+				<a href="../articles/{{a['myid']}}.html">
+
+					{{a['display'] | striptags}}</a>
+		</li>
+		{% endfor%}
+	</ul>
+	{%endfor%}
+
+	{% include "footer.html" %}
+</body>
+
 </html>

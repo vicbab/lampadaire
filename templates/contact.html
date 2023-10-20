@@ -7,9 +7,11 @@
 <body>
 	{% include "header.html" %}
 
-	<h1>contact</h1>
+	<h1>Nous contacter</h1>
 
-	<div class="container" style="margin: 0px auto;">
+	{{contenu|safe}}
+
+	<!-- <div class="container" style="margin: 0px auto;">
 		<form action="https://bitqueues.com/websitecontactform/submit.php" method="post"><input type="hidden" id="fsid"
 				name="fsid" value="s5741697656214">
 			<div class="row">
@@ -28,9 +30,9 @@
 				<div class="col-25"><label for="comments">Message</label></div>
 				<div class="col-75"><input type="text" id="comments" name="comments" placeholder="" style="height:200px"></div>
 			</div> <br>
-			<div class="row"><input type="submit" value="Submit"></div>
+			<div class="row"><input type="submit" value="Soumettre"></div>
 		</form>
-	</div>
+	</div> -->
 	{% include "footer.html" %}
 </body>
 

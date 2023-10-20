@@ -116,80 +116,55 @@ def retrievetags(type):
     r = requests.post(endpoint, json={"query": query}, headers=headers)
     if r.status_code == 200:
         articlesdata = r.json()['data']['articles']
+
+        skipAuthors = False
+
         if type == "article":
             tagName = config.tagName
         elif type == "appel":
             tagName = config.appelTag
+            skipAuthors = True
+
         articles=[]
         for article in articlesdata:
             try:  
                 for tag in article['tags']:
                     if tag['name'] == tagName:
                         titledoc=article['title']
+
                         idart= article['_id'] 
                         yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        
                         myid=re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        
+                        
+
                         try:
                             title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
                         except:
                             title = article['title']
-                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
+                        
+                        if skipAuthors:
+                            display = title
+                        else:
+                            authors = yaml['authors']
+                            display = getdisplay(authors, title)
+
+                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display} 
+
                         if dictart not in articles:
                             articles.append(dictart)                    
             except:
+                print("error")
                 continue
-     
+            
+
         return articles
     else:
         raise Exception(f"Query failed to run with a {r.status_code}.")
 
-def makeAppels():
-    query = """
-    
-    {
-      
-        
-          articles{_id title workingVersion{yaml} tags{name} }
-          
-          
-        
-      }
-    
-    
-    """
-    
-    r = requests.post(endpoint, json={"query": query}, headers=headers)
-    if r.status_code == 200:
-        appelsdata = r.json()['data']['articles']
-        appelTag = config.appelTag
-        appels=[]
-        for appels in appelsdata:
-            try:  
-                for tag in article['tags']:
-                     if tag['name'] == appelTag:
-                        titledoc = article['title']
-                        idart = article['_id'] 
-                        yaml = yamltojs(article['workingVersion']['yaml'])[0] 
-                        myid = re.split('_', getartinfofromyaml(article,'id'))[0]  
-                        try:
-                            title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
-                        except:
-                            title = article['title']
-                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
-                        if dictart not in articles:
-                            appels.append(dictart)                   
-            except:
-                continue
-     
-        return appels
-    else:
-        raise Exception(f"Query failed to run with a {r.status_code}.")
-    
-   
-
 def retrievearticle(article):
     query = '{article(article:"'+article+'"){_id title contributors{user{displayName}} workingVersion{md yaml bib}versions{_id} }}'
-
 
     r = requests.post(endpoint, json={"query": query}, headers=headers)
     if r.status_code == 200:
@@ -227,16 +202,54 @@ def retrievekeywords():
 def retrievedossiers():
     dossiers=[]
     for article in retrievetags("article"):
+        
         article_id = article['id']
         myid = article['myid']
         dossier = article['yaml']['dossier']
         title= article['title']
-        articles_list={'myid':myid,'id':article_id, 'title':title}
+        authors = article['yaml']['authors']
+        display = getdisplay(authors, title)
+       
+        # print(article['authors'])
+        articles_list={'myid':myid,'id':article_id, 'title':title, 'display':display}
         dictdossier = {'dossier': dossier[0], 'articles': articles_list}
         dossiers.append(dictdossier)
                         
      
     return dossiers
+
+def getdisplay(authors, title):
+    authors_list = []
+    for author in authors:
+        try:
+            surname = author['surname']
+        except:
+            surname = ""
+        try:
+            forname = author['forname']
+        except:
+            forname = ""
+        name = forname + " " + surname
+
+        dictauthor = {'name':name}
+        authors_list.append(dictauthor)
+        
+    names = formatnames(authors_list)
+
+    return names + title
+
+def formatnames(authors):
+    names = ""
+    i = 1
+    for author in authors:
+        names = names + author['name']
+        
+        if i < len(authors):
+            names = names + " et "
+        i += 1
+
+    names = names + ", "    
+    return names
 
 def retrieveauthors():
     authors_list=[]

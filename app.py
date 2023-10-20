@@ -48,7 +48,10 @@ def appels(): # la fonction qui sert les données pour la route /
 
 @app.route('/contact') # route où seront servies ces données
 def contact(): # la fonction qui sert les données pour la route /
-    return render_template('contact.html', title="contact - revue lampadaire")
+    page = "static/pages/contact.md"
+    contenu = pypandoc.convert_file(page, 'html', format='md')
+
+    return render_template('contact.html', title="contact - revue lampadaire", contenu=contenu)
 
 @app.route('/articles/<myid>.html')
 def article(myid):
@@ -191,6 +194,8 @@ def dossiers(): # la fonction qui sert les données pour la route /
         data = tools.setdossiers()
     else:
         data = json.load(open('caches/dossiers.json','r'))
+
+
     return render_template('dossiers.html', data=data)
 
 @app.route('/dossiers/<idd>.html')
