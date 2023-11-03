@@ -9,7 +9,7 @@
 <body>
 	{% include "header.html" %}
 
-	<h1><a href="{{author['author']['surname']}}-{{author['author']['forname']}}.html">{{author['author']['surname']}},
+	<h1><a href="{{author['authorslug']}}.html">{{author['author']['surname']}},
 			{{author['author']['forname']}}{%if author['author']['affiliations'] %}, Affiliation:
 			{{author['author']['affiliations']}}
 			{%endif%}
