@@ -23,7 +23,19 @@
 
 	<h2>Articles récents</h2>
 	<ul>
-		{%for i in data%}
+		{%for i in articles%}
+		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
+					href="articles/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></li>
+
+
+		{%endfor%}
+	</ul>
+
+	<br>
+
+	<h2>Appels de textes récents</h2>
+	<ul>
+		{%for i in appels%}
 		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
 					href="articles/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></li>
 

@@ -7,6 +7,7 @@ import pypandoc
 import zipfile, io
 from slugify import slugify
 import traceback
+import os
 
 endpoint = "https://stylo.huma-num.fr/graphql"
 headers = {"Authorization": f"Bearer {config.accessToken}"}
@@ -49,6 +50,7 @@ def idfrommyid(myid):
             if i['id'] == myid:
                 data = {'data':{'article':i}}
     yaml = yamltojs(data['data']['article']['workingVersion']['yaml'])[0]
+    
     try:
         latestversion= data['data']['article']['versions'][0]['_id']
     except:
@@ -72,6 +74,7 @@ def getpdf(article, myid, version):
     print("getting "+article)
     print(myid)
     url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    print(url)
     params = {
                 "with_toc": 0,
                 "with_ascii": 0,
@@ -81,8 +84,14 @@ def getpdf(article, myid, version):
                 }
     r = requests.get(url,params)
     z = zipfile.ZipFile(io.BytesIO(r.content))
-    # print("zip file list: " + z.filelist)
+    print(z.filelist)
     z.extractall("downloads")
+    for file in z.filelist:
+        new_file_name = f'{myid}.pdf'
+        new_file_path = f'downloads/{new_file_name}'
+        if os.path.exists(new_file_path):
+            os.remove(new_file_path)
+        os.rename(f'downloads/{file.filename}', new_file_path)
         
 def getxml(article, myid, version):
     print("getting "+article)
@@ -96,7 +105,7 @@ def getxml(article, myid, version):
                 }
     r = requests.get(url,params)
     z = zipfile.ZipFile(io.BytesIO(r.content))
-    print(z.filelist)
+    # print("zipfile:" + z.filelist)
     z.extractall("downloads")
 
 def retrievetags(type):

@@ -5,6 +5,7 @@ import pypandoc
 import re
 import makecaches
 import json
+import os
 from slugify import slugify
 
 
@@ -20,10 +21,11 @@ else:
 @app.route('/') # route où seront servies ces données
 def homepage(): # la fonction qui sert les données pour la route /
     if config.dynamic:
-        data = tools.retrievetags("article")
+        articles = tools.retrievetags("article")
+        appels = tools.retrievetags("appel")
     else:
         data = json.load(open('caches/articles.json','r'))
-    return render_template('index.html', title=config.title, data=data)
+    return render_template('index.html', title=config.title, articles=articles, appels=appels)
 
 @app.route('/contribuer.html') # route où seront servies ces données
 def contribuer(): # la fonction qui sert les données pour la route /
@@ -128,9 +130,11 @@ def articlepdf(myid):
     # print(myid,id,version)
     tools.getpdf(id,myid,version)
     #For windows you need to use drive name [ex: F:/Example.pdf]
-    path = "downloads/"+myid+"-"+id+"/"+myid+".pdf"
-    print(path)
-    return send_file(path, as_attachment=True)
+    path = os.path.join('downloads', f'{myid}.pdf')
+    if os.path.exists(path):
+        return send_file(path, as_attachment=True)
+    else:
+        return "File not found", 404
 
 @app.route('/xml/<myid>')
 def articlexml(myid):

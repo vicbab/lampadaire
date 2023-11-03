@@ -3,6 +3,7 @@ from app import app
 import tools
 import config
 import json
+import os
 
 freezer = Freezer(app)
 
@@ -44,9 +45,17 @@ def articlepdf():
         data = json.load(open('caches/articles.json','r'))
     for article in data :
         if article['myid'] == '':
-            yield {'myid': article['id']}
+            print("1" + article['id'])
+            yield {'myid': article['id'] + '.pdf'}
         else:    
+            print("2" + article['myid'])
+            print({'myid': article['myid']})
+            
             yield {'myid': article['myid']}
+            old_file_name = "build/downloads/" + article['myid']
+            new_file_name = old_file_name + '.pdf'
+
+            os.rename(old_file_name, new_file_name)
 
 if __name__ == '__main__':
     freezer.freeze()
