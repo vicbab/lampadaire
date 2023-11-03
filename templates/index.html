@@ -2,6 +2,8 @@
 
 <head>
 	<link href="/static/css/style.css" rel="stylesheet">
+	<title>{{title|striptags}}</title>
+	<link rel="icon" type="image/png" href="../static/media/favicon.png">
 </head>
 
 <body class="accueil">
@@ -31,13 +33,21 @@
 		{%endfor%}
 	</ul>
 
-	<br>
 
 	<h2>Appels de textes récents</h2>
 	<ul>
 		{%for i in appels%}
 		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
 					href="articles/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></li>
+
+
+		{%endfor%}
+	</ul>
+
+	<h2>Numéros récents</h2>
+	<ul>
+		{%for d in dossiers%}
+		<li style="font-size: large;"><a href="dossiers/{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></li>
 
 
 		{%endfor%}
