@@ -6,6 +6,7 @@ import re
 import pypandoc
 import zipfile, io
 from slugify import slugify
+import traceback
 
 endpoint = "https://stylo.huma-num.fr/graphql"
 headers = {"Authorization": f"Bearer {config.accessToken}"}
@@ -24,7 +25,7 @@ def idfrommyid(myid):
 
     id=myid #cela permet de faire fonctionner l'application avec les id stylo. dans ce cas la fonction returnera id=myid
     if config.dynamic:
-        la = retrievetags("article")
+        la = retrievetags("both")
     else:
         la = json.load(open('caches/articles.json','r'))
     for i in la:
@@ -47,7 +48,6 @@ def idfrommyid(myid):
           for i in la:
             if i['id'] == myid:
                 data = {'data':{'article':i}}
-
     yaml = yamltojs(data['data']['article']['workingVersion']['yaml'])[0]
     try:
         latestversion= data['data']['article']['versions'][0]['_id']
@@ -70,6 +70,7 @@ def getartinfofromyaml(article,key):
 # fonction pour récuperer le pdf via l'export stylo. Si on crée un export pour femur, on pourra avoir un template particulier et récuperer aussi l'xml
 def getpdf(article, myid, version):
     print("getting "+article)
+    print(myid)
     url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
     params = {
                 "with_toc": 0,
@@ -80,7 +81,7 @@ def getpdf(article, myid, version):
                 }
     r = requests.get(url,params)
     z = zipfile.ZipFile(io.BytesIO(r.content))
-    print(z.filelist)
+    # print("zip file list: " + z.filelist)
     z.extractall("downloads")
         
 def getxml(article, myid, version):
@@ -117,19 +118,28 @@ def retrievetags(type):
     if r.status_code == 200:
         articlesdata = r.json()['data']['articles']
 
+        # tagName = ""
+        
         skipAuthors = False
+        
+
+        tagNames = []
 
         if type == "article":
-            tagName = config.tagName
+            tagNames.append(config.tagName)
         elif type == "appel":
-            tagName = config.appelTag
+            tagNames.append(config.appelTag)
             skipAuthors = True
+        elif type == "both":
+            tagNames.append(config.tagName)
+            tagNames.append(config.appelTag)
+            # skip = True
 
         articles=[]
         for article in articlesdata:
             try:  
                 for tag in article['tags']:
-                    if tag['name'] == tagName:
+                    if tag['name'] in tagNames:
                         titledoc=article['title']
 
                         idart= article['_id'] 
@@ -143,19 +153,50 @@ def retrievetags(type):
                             title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
                         except:
                             title = article['title']
+
                         
+
+                        # if "Appel" in title:
+                        #     skipAuthors = True
+
                         if skipAuthors:
                             display = title
                         else:
                             authors = yaml['authors']
                             display = getdisplay(authors, title)
 
+                        # authors = yaml['authors']
+                        # display = getdisplay(authors, title)
+
                         dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display} 
 
                         if dictart not in articles:
-                            articles.append(dictart)                    
+                            articles.append(dictart)
+
+                    # if tag['name'] == tagName or skip:
+                    #     titledoc=article['title']
+
+                    #     idart= article['_id'] 
+                    #     yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        
+                    #     myid=re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        
+                        
+
+                    #     try:
+                    #         title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
+                    #     except:
+                    #         title = article['title']
+
+                    #     authors = yaml['authors']
+                    #     display = title
+
+                    #     dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display} 
+
+                    #     if dictart not in articles:
+                    #         articles.append(dictart)             
             except:
-                print("error")
+                traceback.print_exc()
                 continue
             
 

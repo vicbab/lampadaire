@@ -9,7 +9,7 @@ freezer = Freezer(app)
 @freezer.register_generator
 def article():
     if config.dynamic:
-        data = tools.retrievetags()
+        data = tools.retrievetags("both")
     else:
         data = json.load(open('caches/articles.json','r'))
     for article in data :
@@ -39,7 +39,7 @@ def keyword():
 @freezer.register_generator
 def articlepdf():
     if config.dynamic:
-        data = tools.retrievetags()
+        data = tools.retrievetags("both")
     else:
         data = json.load(open('caches/articles.json','r'))
     for article in data :

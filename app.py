@@ -25,20 +25,20 @@ def homepage(): # la fonction qui sert les données pour la route /
         data = json.load(open('caches/articles.json','r'))
     return render_template('index.html', title=config.title, data=data)
 
-@app.route('/contribuer') # route où seront servies ces données
+@app.route('/contribuer.html') # route où seront servies ces données
 def contribuer(): # la fonction qui sert les données pour la route /
     page = "static/pages/contribuer.md"
     contenu = pypandoc.convert_file(page, 'html', format='md')
 
     return render_template('contribuer.html', title=config.title, contenu=contenu)
 
-@app.route('/a-propos') # route où seront servies ces données
+@app.route('/a-propos.html') # route où seront servies ces données
 def aboutpage(): # la fonction qui sert les données pour la route /
     page = "static/pages/a-propos.md"
     contenu = pypandoc.convert_file(page, 'html', format='md')
     return render_template('a-propos.html', title="à propos - revue lampadaire", contenu = contenu)
 
-@app.route('/appels') # route où seront servies ces données
+@app.route('/appels.html') # route où seront servies ces données
 def appels(): # la fonction qui sert les données pour la route /
     if config.dynamic:
         data = tools.retrievetags("appel")
@@ -46,7 +46,7 @@ def appels(): # la fonction qui sert les données pour la route /
         data = json.load(open('caches/appels.json','r'))
     return render_template('appels.html', title="appels de textes - revue lampadaire", data=data)
 
-@app.route('/contact') # route où seront servies ces données
+@app.route('/contact.html') # route où seront servies ces données
 def contact(): # la fonction qui sert les données pour la route /
     page = "static/pages/contact.md"
     contenu = pypandoc.convert_file(page, 'html', format='md')
@@ -56,7 +56,7 @@ def contact(): # la fonction qui sert les données pour la route /
 @app.route('/articles/<myid>.html')
 def article(myid):
 
-
+    print(myid)
     alldata=tools.idfrommyid(myid)    # fonction pour récuperer les données d'un article à partir de son id yaml
     data=alldata[0]
     myid=alldata[1]
@@ -79,6 +79,8 @@ def article(myid):
             authorslug = slugify(au['surname'])+'-'+slugify(au['forname'])
             au.update({'authorslug':authorslug})
             au_sl.append(au)
+        
+        # TODO: Ici, ajouter le display pour les noms d'auteurs multiples avec un "et"
     except:
         au_sl=[]
     yaml.update({'authors':au_sl})
@@ -127,6 +129,7 @@ def articlepdf(myid):
     tools.getpdf(id,myid,version)
     #For windows you need to use drive name [ex: F:/Example.pdf]
     path = "downloads/"+myid+"-"+id+"/"+myid+".pdf"
+    print(path)
     return send_file(path, as_attachment=True)
 
 @app.route('/xml/<myid>')
