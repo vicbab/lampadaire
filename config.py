@@ -6,7 +6,7 @@ accessToken=myToken
 endpoint = "https://stylo.huma-num.fr/graphql"
 
 
-title = 'Revue Lampadaire'
+title = 'revue lampadaire'
 
 tagName = 'ARTICLE_PUB'
 

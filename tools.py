@@ -68,13 +68,10 @@ def getartinfofromyaml(article,key):
         value = ''
     return value
 
-
 # fonction pour récuperer le pdf via l'export stylo. Si on crée un export pour femur, on pourra avoir un template particulier et récuperer aussi l'xml
 def getpdf(article, myid, version):
-    print("getting "+article)
-    print(myid)
+    print("getting "+ myid)
     url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
-    print(url)
     params = {
                 "with_toc": 0,
                 "with_ascii": 0,
@@ -84,7 +81,6 @@ def getpdf(article, myid, version):
                 }
     r = requests.get(url,params)
     z = zipfile.ZipFile(io.BytesIO(r.content))
-    print(z.filelist)
     z.extractall("downloads")
     for file in z.filelist:
         new_file_name = f'{myid}.pdf'
@@ -92,21 +88,31 @@ def getpdf(article, myid, version):
         if os.path.exists(new_file_path):
             os.remove(new_file_path)
         os.rename(f'downloads/{file.filename}', new_file_path)
+        print(file.filename.split('/')[0])
         
-def getxml(article, myid, version):
-    print("getting "+article)
-    url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
-    params = {
-                "with_toc": 0,
-                "with_ascii": 0,
-                "version": version,
-                "bibliography_style": "chicagomodified",
-                "formats": "xml-tei-metopes-1",
-                }
-    r = requests.get(url,params)
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    # print("zipfile:" + z.filelist)
-    z.extractall("downloads")
+# def getxml(article, myid, version):
+    # try:
+    #     print("getting "+article)
+    #     url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    #     params = {
+    #                 "with_toc": 0,
+    #                 "with_ascii": 0,
+    #                 "version": version,
+    #                 "bibliography_style": "chicagomodified",
+    #                 "formats": "xml-tei-metopes-1",
+    #                 }
+    #     r = requests.get(url,params)
+    #     z = zipfile.ZipFile(io.BytesIO(r.content))
+    #     # print("zipfile:" + z.filelist)
+    #     z.extractall("downloads")
+    #     for file in z.filelist:
+    #         new_file_name = f'{myid}.xml'
+    #         new_file_path = f'downloads/{new_file_name}'
+    #         if os.path.exists(new_file_path):
+    #             os.remove(new_file_path)
+    #         os.rename(f'downloads/{file.filename}', new_file_path)
+    # except:
+    #     print("no xml")
 
 def retrievetags(type):
     query = """
@@ -205,14 +211,13 @@ def retrievetags(type):
                     #     if dictart not in articles:
                     #         articles.append(dictart)             
             except:
-                traceback.print_exc()
+                # traceback.print_exc()
                 continue
             
 
         return articles
     else:
         raise Exception(f"Query failed to run with a {r.status_code}.")
-
 def retrievearticle(article):
     query = '{article(article:"'+article+'"){_id title contributors{user{displayName}} workingVersion{md yaml bib}versions{_id} }}'
 
@@ -223,7 +228,6 @@ def retrievearticle(article):
         return data
     else:
         raise Exception(f"Query failed to run with a {r.status_code}.")
-
 def retrievekeywords():
     key_fr=[]
     data = retrievetags("article")
@@ -248,7 +252,6 @@ def retrievekeywords():
             continue
                 
     return key_fr
-
 def retrievedossiers():
     dossiers=[]
     for article in retrievetags("article"):
@@ -267,7 +270,6 @@ def retrievedossiers():
                         
      
     return dossiers
-
 def getdisplay(authors, title):
     authors_list = []
     for author in authors:
@@ -287,7 +289,6 @@ def getdisplay(authors, title):
     names = formatnames(authors_list)
 
     return names + title
-
 def formatnames(authors):
     names = ""
     i = 1
@@ -300,7 +301,6 @@ def formatnames(authors):
 
     names = names + ", "    
     return names
-
 def retrieveauthors():
     authors_list=[]
     for article in retrievetags("article"):
@@ -350,7 +350,6 @@ def setdossiers():
             else:
                 seen.append(d['dossier']['id'])
                 new_l.append(d['dossier'])
-
     liste_dict_dossiers= []
     for d in new_l:
         liste_sd = []        
@@ -362,8 +361,6 @@ def setdossiers():
         dictd.update({'articles':liste_sd})        
         liste_dict_dossiers.append(dictd)    
     return liste_dict_dossiers    
-
-
 def setauthors():
     authors = retrieveauthors()
     authorssorted = sorted(authors, key=lambda k: k['author']['surname']) 
@@ -373,7 +370,6 @@ def setauthors():
         if (a['author']['forname'], a['author']['surname']) not in seen: ## attention: ça marche pas s'il y a des homonimes (même nom, même prénom)
             seen.append((a['author']['forname'], a['author']['surname']))
             new_l.append(a['author'])
-
     liste_dict_authors= []
     for a in new_l:
         liste_sd = []        
@@ -384,11 +380,8 @@ def setauthors():
                 dicta.update({'authorslug': i['authorslug']})
                 try: 
                     bio = pypandoc.convert_text(i['author']['biography'], 'html', format='md') 
-                    
                         
                     a.update({'biography':bio})    
-
-
 
                 except KeyError:
                     continue
@@ -396,3 +389,21 @@ def setauthors():
         dicta.update({'articles':liste_sd})        
         liste_dict_authors.append(dicta)    
     return liste_dict_authors    
+
+def renameFiles(name, type, path):
+    print(os.listdir(path))
+    if type == "pdf":
+        extension = ".pdf"
+    elif type == "xml":
+        extension = ".xml"
+
+    old_file_name = path + name
+    new_file_name = old_file_name + extension
+    # If new_file_name exists, delete it
+    if os.path.exists(new_file_name):
+        print("deleting" + new_file_name)
+        os.remove(new_file_name)
+    # Rename file
+    if os.path.exists(old_file_name):
+        print("renaming" + old_file_name + " to " + new_file_name)
+        os.rename(old_file_name, new_file_name)

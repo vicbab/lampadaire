@@ -23,9 +23,11 @@ def homepage(): # la fonction qui sert les données pour la route /
     if config.dynamic:
         articles = tools.retrievetags("article")
         appels = tools.retrievetags("appel")
+        dossiers = tools.setdossiers()
     else:
+        # TODO: fix ceci pour match avec les nouvelles fonctions
         data = json.load(open('caches/articles.json','r'))
-    return render_template('index.html', title=config.title, articles=articles, appels=appels)
+    return render_template('index.html', title=config.title, articles=articles, appels=appels, dossiers=dossiers)
 
 @app.route('/contribuer.html') # route où seront servies ces données
 def contribuer(): # la fonction qui sert les données pour la route /
@@ -57,8 +59,6 @@ def contact(): # la fonction qui sert les données pour la route /
 
 @app.route('/articles/<myid>.html')
 def article(myid):
-
-    print(myid)
     alldata=tools.idfrommyid(myid)    # fonction pour récuperer les données d'un article à partir de son id yaml
     data=alldata[0]
     myid=alldata[1]
@@ -136,19 +136,18 @@ def articlepdf(myid):
     else:
         return "File not found", 404
 
-@app.route('/xml/<myid>')
-def articlexml(myid):
-
-    alldata=tools.idfrommyid(myid)    
-    data=alldata[0]
-    myid=alldata[1]
-    id = alldata[3]
-    version=alldata[4]
-    # print(myid,id,version)
-    tools.getpdf(id,myid,version)
-    #For windows you need to use drive name [ex: F:/Example.pdf]
-    path = "downloads/"+myid+"-"+id+"/"+myid+"-metopes.tei.xml"
-    return send_file(path, as_attachment=True)
+# @app.route('/xml/<myid>')
+# def articlexml(myid):
+    # alldata=tools.idfrommyid(myid)    
+    # data=alldata[0]
+    # myid=alldata[1]
+    # id = alldata[3]
+    # version=alldata[4]
+    # # print(myid,id,version)
+    # tools.getpdf(id,myid,version)
+    # #For windows you need to use drive name [ex: F:/Example.pdf]
+    # path = "downloads/"+myid+"-"+id+"/"+myid+"-metopes.tei.xml"
+    # return send_file(path, as_attachment=True)
 
 @app.route('/motscles/index.html') # route où seront servies ces données
 def keywords(): # la fonction qui sert les données pour la route /
@@ -158,7 +157,7 @@ def keywords(): # la fonction qui sert les données pour la route /
         data = json.load(open('caches/keywords.json','r'))
 
     data = sorted(data, key=lambda k: k['name']) 
-    return render_template('motscles.html', data=data)
+    return render_template('motscles.html', title="mots-clés - revue lampadaire", data=data)
 
 @app.route('/motscles/<name>.html')
 def keyword(name):
@@ -171,7 +170,7 @@ def keyword(name):
     for k in data:
         if k['nameslug'] == name:
             mykeyword = k
-    return render_template('motcle.html', mykeyword=mykeyword)
+    return render_template('motcle.html', title= name + " - revue lampadaire", mykeyword=mykeyword)
 
 @app.route('/authors/index.html') # route où seront servies ces données
 def authors(): # la fonction qui sert les données pour la route /
@@ -180,7 +179,7 @@ def authors(): # la fonction qui sert les données pour la route /
     else:
         data = json.load(open('caches/authors.json','r'))
 
-    return render_template('authors.html', data=data)
+    return render_template('authors.html', title="auteurices - revue lampadaire", data=data)
 
 @app.route('/authors/<name>.html')
 def author(name):
@@ -189,11 +188,11 @@ def author(name):
         data = tools.setauthors()
     else:
         data = json.load(open('caches/authors.json','r'))
-    author={}
+    myauthor={}
     for a in data:
         if a['authorslug'] == name:
             myauthor = a
-    return render_template('author.html', author=myauthor)
+    return render_template('author.html', title= name + " - revue lampadaire", author=myauthor)
 
 @app.route('/dossiers/index.html') # route où seront servies ces données
 def dossiers(): # la fonction qui sert les données pour la route /
