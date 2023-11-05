@@ -2,6 +2,8 @@
 
 <head>
 	<link href="../static/css/style.css" rel="stylesheet">
+	<link rel="preconnect" href="https://rsms.me/">
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
 </head>
@@ -28,9 +30,9 @@
 		{%if yaml['date']%}
 		<p> <span><b>Date de publication:</b> {{yaml['date']}}</span></p>
 		{%endif%}
-		{%if yaml['rights']%}
+		<!-- {%if yaml['rights']%}
 		<p><b>Licence:</b> {{yaml['rights']}}</p>
-		{%endif%}
+		{%endif%} -->
 		{%if yaml['keywords']%}
 		<p> <span><b>Mots-clés:</b> {% for k in yaml['keywords'] %}{%for n in k['list_f'] %} <a
 					href="../motscles/{{n[1]}}.html">{{n[0]}}</a>{% if not loop.last %},
