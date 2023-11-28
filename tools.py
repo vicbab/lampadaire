@@ -71,12 +71,12 @@ def getartinfofromyaml(article,key):
 # fonction pour récuperer le pdf via l'export stylo. Si on crée un export pour femur, on pourra avoir un template particulier et récuperer aussi l'xml
 def getpdf(article, myid, version):
     print("getting "+ myid)
-    url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    url ="http://127.0.0.1:5000/lampadaire/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
     params = {
                 "with_toc": 0,
                 "with_ascii": 0,
                 "version": version,
-                "bibliography_style": "chicagomodified",
+                "bibliography_style": "universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie",
                 "formats": "pdf",
                 }
     r = requests.get(url,params)

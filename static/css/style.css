@@ -5,9 +5,8 @@ body {
   line-height: 22px;
   font-weight: 400;
   color: #000;
-  width: 85%;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 7.5%;
+  margin-right: 7.5%;
   background-color: #FFEDD2;
   /* text-shadow: -1px -1px #e0e0e0; */
 }
@@ -180,4 +179,10 @@ ul.menuA {
 
 .menuA > li:hover {
   background-color: #FFEDD2;
+}
+
+.article{
+  text-align: justify;
+  padding-left: 12.5%;
+  padding-right: 12.5%;
 }

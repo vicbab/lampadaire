@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	
 </head>
 
 <body>
@@ -24,7 +25,7 @@
 				https://orcid.org/{{a['orcid']}}
 			</a>
 			{%endif%}
-			
+			{%if a|length > 3%} <br> {%endif%}
 
 		</a>{%endfor%}
 		{%if yaml['date']%}

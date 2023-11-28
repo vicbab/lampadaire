@@ -81,6 +81,7 @@ def article(myid):
             authorslug = slugify(au['surname'])+'-'+slugify(au['forname'])
             au.update({'authorslug':authorslug})
             au_sl.append(au)
+            
         
         # TODO: Ici, ajouter le display pour les noms d'auteurs multiples avec un "et"
     except:
@@ -88,7 +89,7 @@ def article(myid):
     yaml.update({'authors':au_sl})
     title = pypandoc.convert_text(yaml['title_f'], 'html', format='md') 
     try:
-        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md')
+        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md', extra_args=['--citeproc', '--bibliography=static/lampadaire.bib', '--csl=https://www.zotero.org/styles/universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie'])
     except:
         myarticle = data['data']['article']['workingVersion']['md']
     abstract_fr=''
@@ -218,4 +219,4 @@ def dossier(idd):
     return render_template('dossier.html', mydossier=mydossier)
 
 if __name__ == '__main__':
-  app.run(debug=True)
+  app.run(debug=True, port=3000)
