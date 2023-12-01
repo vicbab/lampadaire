@@ -5,8 +5,11 @@
 		<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 		<title>{{title|striptags}}</title>
 		<link rel="icon" type="image/png" href="../static/media/favicon.png">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 	</head>
 	<body>
+		<div class="corps">
 		{% include "header.html" %}
 <h1>{{mydossier['dossier']['title_f']}}</h1>
 
@@ -16,6 +19,7 @@
 <li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
 {% endfor%}
 </ul>
+</div>
 {% include "footer.html" %}
 	</body>
 </html>

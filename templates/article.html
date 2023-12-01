@@ -6,25 +6,114 @@
 	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="generator" content="pandoc-template_Html5" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
 	
+	<meta name="DC.type" content="Text" />
+	<meta name="DC.format" content="text/html" />
+	<meta name="DC.type" content="journalArticle" />
+	<!-- <meta name="DC.type" class="typeArticle" content="Essai" /> -->
+	<meta name="DC.title" content="{{title|safe}}" />
+	<meta name="DC.title.Main" content="{{title|safe}}" />
+	<!-- <meta name="DC.publisher" class="editeur" content="" /> -->
+	<meta name="DC.publisher" class="producteur" content="Lampadaire" />
+	<meta name="DC.publisher" class="producteurNum" content="Lampadaire" />
+	<meta name="DC.language" content="fr" />
+	<meta name="DC.date" class="completeDate" content="{{yaml['date']}}"/>
+	<meta name="DC.date" class="year" content="{{yaml['date']}}[0:3]"/>
+	<meta name="DC.rights" content="{{yaml['rights']}}" />
+	<meta name="DC.source" content="Lampadaire" />
+	<meta name="DC.relation.isPartOf" content="" />
+	<meta name="url" content="" />
+	<meta name="DC.identifier" content="" />
+	<meta name="DC.identifier" class="issn" content="XXXX-XXXX" />
+	<!-- <meta name="director" content="" />
+	<meta name="DC.contributor.drt" content="" /> 
+	<meta name="MARCREL.drt" content="" />-->
+	<meta name="author" content="{%for a in authors%}{{a.forname}} {{a.surname}};{%endfor%}" />
+	<meta name="DC.creator" content="{%for a in authors%}{{a.forname}} {{a.surname}};{%endfor%}" />
+	<meta name="description" xml:lang="fr" lang="fr"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta name="DC.description" xml:lang="fr" lang="fr"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta name="description" xml:lang="en" lang="en"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta name="DC.description" xml:lang="en" lang="en"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta name="keywords" xml:lang="fr" lang="fr"
+		content="{%if yaml['keywords']%}{% for k in yaml['keywords'] %}{%for n in k['list_f'] %}{{n[0]}}{% if not loop.last %}, {% endif %}{%endfor%}{%endfor%}{%endif%}" />
+	<meta name="keywords" xml:lang="en" lang="en"
+		content="{%if yaml['keywords']%}{% for k in yaml['keywords'] %}{%for n in k['list_f'] %}{{n[0]}}{% if not loop.last %}, {% endif %}{%endfor%}{%endfor%}{%endif%}" />
+	<meta name="DC.subject" xml:lang="fr" lang="fr" content="Philosophie" />
+	
+	<meta name="citation_journal_title" content="Lampadaire" />
+	<!-- <meta name="citation_publisher" content="" /> -->
+	<meta name="citation_authors" content="{%for a in authors%}{{a.forname}} {{a.surname}};{%endfor%}" />
+	<meta name="citation_title" content="{{title|striptags}}" />
+	<meta name="citation_publication_date" content="{{yaml['date']}}" />
+	<meta name="citation_online_date" content="{{yaml['date']}}" />
+	<meta name="citation_issn" content="XXXX-XXXX" /> <!-- ISSN à remplir!! -->
+	<meta name="citation_issue" content="{% if yaml['dossier'] %}{% for d in yaml['dossier'] %}{{d['id'][0:2]}}{% endfor %}{% endif %}" />
+	<meta name="citation_language" content="fr" />
+	<meta name="citation_abstract" xml:lang="fr" lang="fr"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta name="citation_abstract" xml:lang="en" lang="en"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta name="citation_keywords" xml:lang="fr" lang="fr"
+		content="{%if yaml['keywords']%}{% for k in yaml['keywords'] %}{%for n in k['list_f'] %}{{n[0]}}{% if not loop.last %}, {% endif %}{%endfor%}{%endfor%}{%endif%}" />
+	<meta name="citation_keywords" xml:lang="en" lang="en"
+		content="{%if yaml['keywords']%}{% for k in yaml['keywords'] %}{%for n in k['list_f'] %}{{n[0]}}{% if not loop.last %}, {% endif %}{%endfor%}{%endfor%}{%endif%}" />
+	<meta name="citation_pdf_url" content="/downloads/{{myid}}.pdf" />
+	
+	<meta name="prism.url" content="{{yaml['url']}}" />
+	<meta name="prism.publicationName" content="Lampadaire" />
+	<!-- <meta name="prism.corporateEntity" content="" /> -->
+	<!-- <meta name="prism.issueName" content="" />
+	<meta name="prism.number" content="" /> -->
+	<meta name="prism.publicationDate" content="{{yaml['date']}}" />
+	<meta name="prism.genre" content="?" />
+	<meta name="prism.issn" content="XXXX-XXXX" />
+	<meta name="prism.eIssn" content="XXXX-XXXX" />
+	<meta name="prism.teaser" xml:lang="fr" lang="fr"
+		content="" />
+	<meta name="prism.teaser" xml:lang="en" lang="en"
+		content="" />
+	<meta property="dc:format" content="text/html" />
+	<!-- <meta property="dc:identifier" content="" />
+	<meta property="dc:identifier" content="XXXX-XXXX" /> -->
+	<meta property="dc:title" content="{{title|striptags}}" />
+	<meta property="dc:title.Main" content="{{title|striptags}}" />
+	<meta property="dc:publisher" content="Lampadaire" />
+	<meta property="dc:language" content="fr" />
+	<meta property="dc:type" content="journalArticle" />
+	<meta property="dcterm:created" content="{{yaml['date']}}" />
+	<meta property="dc:rights" content="{{yaml['rights']}}" />
+	<meta property="dc:relation.isPartOf" content="" />
+	<meta property="dc:source" content="Lampadaire" />
+	<meta property="dc:creator" content="{%for a in authors%}{{a.forname}} {{a.surname}};{%endfor%}" />
+	<meta property="dcterms:abstract" xml:lang="fr" lang="fr"
+		content="{% if abstract_fr%}{{abstract_fr}}{%endif%}" />
+	<meta property="dcterms:abstract" xml:lang="en" lang="en"
+		content="{% if abstract_en%}{{abstract_en}}{%endif%}" />
+	<meta property="dc:subject" xml:lang="fr" lang="fr" content="Philosophie" />	
 </head>
 
 <body>
-	{% include "header.html" %}
-
+	<div class="corps">
+		{% include "header.html" %}
 	<div class="article">
 		<!-- <h1>{{title|safe}} {{myid}}</h1> -->
 		<h1>{{title|safe}}</h1>
-		{%for a in authors%}<a href="../authors/{{a.authorslug}}.html"><b>{{a.forname}} {{a.surname}}</b>{%if
-			a['affiliations']
-			%}, {{a['affiliations']}}{%endif%}
-			{%if a['orcid']%}<br>
+		{%for a in authors%}<a href="../authors/{{a.authorslug}}.html"><b>{{a.forname}} {{a.surname}}</b>{%if a['orcid']%}
 			<a href="https://orcid.org/{{a['orcid']}}">
 				<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
 					height="16" />
-				https://orcid.org/{{a['orcid']}}
 			</a>
-			{%endif%}
+			{%endif%}{%if
+			a['affiliations']
+			%}, {{a['affiliations']}}{%endif%}
 			{%if a|length > 3%} <br> {%endif%}
 
 		</a>{%endfor%}
@@ -40,7 +129,7 @@
 				{% endif %} {%endfor%}{%endfor%} </span></p>
 		{%endif%}
 
-		<h3><a href="../downloads/{{myid}}.pdf" download><?xml version="1.0" encoding="UTF-8"?><svg xmlns="http://www.w3.org/2000/svg" width="18px" height="18px" fill="none" stroke-width="1.5" viewBox="0 0 24 24" color="#000000"><path stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M6 20h12M12 4v12m0 0 3.5-3.5M12 16l-3.5-3.5"></path></svg> Télécharger en PDF</a></h3>
+		<h3><a href="../downloads/{{myid}}.pdf" download><i class="fa-solid fa-download"></i> Télécharger en PDF</a></h3>
 		<!-- <h2><a href="../xml/{{myid}}">XML de l'article</a></h2> -->
 		
 		{% if abstract_fr%}
@@ -57,8 +146,9 @@
 		{{myarticle|safe}}
 
 	</div>
-
+	</div>
 	{% include "footer.html" %}
+
 </body>
 
 </html>

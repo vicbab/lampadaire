@@ -6,35 +6,35 @@
 	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
+	<div class="corps">
 	{% include "header.html" %}
 
 	<h1>Numéros</h1>
 
-	{% for d in data %}
+	
 
-	<h2>{% for d in data %}
-
-	<h2><a href="{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></h2>
-	<!-- Liste articles: -->
-	<ul>
-		{% for a in d['articles'] %}
-		<li>{%if a['myid'] == ''%}
-			<a href="../articles/{{a['id']}}.html">
-				{%else%}
-				{%endif%}
-
-				<a href="../articles/{{a['myid']}}.html">
-
-					{{a['display'] | striptags}}</a>
-		</li>
-		{% endfor%}
-	</ul>
-	{%endfor%}</h2>
-	{%endfor%}
-
+	{% for d in data | reverse %}
+    <table class="display">
+        <tr style="font-size: large;">
+			<td >No. {{d['dossier']['id'][0:2]}}</td>
+            <td style="width: 30%;"><a href="/dossiers/{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></td>
+            <td>
+                {% for a in d['articles'] %}
+                    {%if a['myid'] != ''%}
+                        <a href="../articles/{{a['myid']}}.html">{{a['display'] | striptags}}</a><br>
+                    {%endif%}
+                {%endfor%}
+            </td>
+        </tr>
+    </table>
+{% endfor %}
+	
+</div>
 	{% include "footer.html" %}
 </body>
 

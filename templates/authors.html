@@ -6,27 +6,32 @@
 	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
 </head>
 
 <body>
+	<div class="corps">
 	{% include "header.html" %}
 
 	<h1>Auteurices</h1>
-
-	{% for a in data %}
-	<h2><a href="{{a['authorslug']}}.html">
-			{{a['author']['surname']}}, {{a['author']['forname']}}{%if a['author']['affiliations']%} ({{a['author']['affiliations']}})
-			{%endif%}
-		</a></h2>
-	<!-- Liste articles: -->
-	<ul>
-		{% for art in a['articles'] %}
-		<li>{%if art['myid'] == ''%}<a href="../articles/{{art['id']}}.html">{%else%}<a
-					href="../articles/{{art['myid']}}.html">{%endif%}{{art['title']|safe}}</a></li>
-		{% endfor%}
-	</ul>
-	{%endfor%}
-
+	<table class="display">
+		{% for a in data %}
+			<tr>
+				<td>
+					<a href="{{a['authorslug']}}.html">
+						{{a['author']['forname']}} {{a['author']['surname']}} {%if a['author']['affiliations']%} ({{a['author']['affiliations']}}){%endif%}</a>
+				</td>
+				<td>
+					{% for art in a['articles'] %}{%if art['myid'] == ''%}
+					<a href="../articles/{{art['id']}}.html"><br>{%else%}
+						<a href="../articles/{{art['myid']}}.html">{{art['title']|striptags}}</a><br>
+						{%endif%}{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+	</div>
 	{% include "footer.html" %}
 </body>
 

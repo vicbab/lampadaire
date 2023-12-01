@@ -1,14 +1,35 @@
 body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
   font-family: 'Inter';
   font-size: 16px;
   letter-spacing: -0.011em;
   line-height: 22px;
   font-weight: 400;
   color: #000;
-  margin-left: 7.5%;
-  margin-right: 7.5%;
-  background-color: #FFEDD2;
+  background-color: #FFEDD1;
+  margin:0;
+  padding:0;
   /* text-shadow: -1px -1px #e0e0e0; */
+}
+.bodyA{
+  background-color: #00A44F;
+}
+
+::selection{
+  background: #A1AAAF;
+  color:#000;
+}
+
+.huge {
+  font-size: 36px;
+  letter-spacing: -0.019em;
+  line-height: 34px;
+  font-weight: bold;
+  width: 100%; 
+  display: block;
+  text-align: justify;
 }
 
 h1{
@@ -37,10 +58,45 @@ a {
   color: #000;
 }
 
+
+.footer{
+  width: 100%;
+  background-color: #A53104;
+  margin-top: auto;
+  font-weight: 600;
+  
+}
+
+.footer table {
+  border-top: 2px solid #000;
+  table-layout: fixed;
+  text-align: left;
+  border-spacing: 8%;
+  padding-left: 15%;
+}
+
+.footer table td{
+  border-top: none;
+  vertical-align: top;
+  width: 33%;
+}
+
 a:hover {
   text-decoration: underline;
   /* color: #4C7C8C; */
   color: #000;
+}
+
+.accueil{
+  margin-left: 15%;
+  margin-right: 15%;
+  background-color: #00A44F;
+}
+
+.corps{
+  margin-left: 15%;
+  margin-right: 15%;
+  background-color: #FFEDD1;
 }
 
 .accueil a:hover {
@@ -56,7 +112,7 @@ p.appels {
  input[type=text], select, textarea {
   width: 100%; /* Full width */
   padding: 12px; /* Some padding */ 
-  border: 1px solid #00A450; /* Gray border */
+  border: 1px solid #00A44F; /* Gray border */
   border-radius: 4px; /* Rounded borders */
   box-sizing: border-box; /* Make sure that padding and width stays in place */
   margin-top: 6px; /* Add a top margin */
@@ -66,7 +122,7 @@ p.appels {
 
 /* Style the submit button with a specific background color etc */
 input[type=submit] {
-  background-color: #00A450;
+  background-color: #00A44F;
   color: #000;
   padding: 12px 20px;
   border: none;
@@ -76,7 +132,7 @@ input[type=submit] {
 
 /* When moving the mouse over the submit button, add a darker green color */
 input[type=submit]:hover {
-  background-color: #45a049;
+  background-color: #00A44F;
 }
 
 /* Add a background color and some padding around the form */
@@ -84,10 +140,6 @@ input[type=submit]:hover {
   border-radius: 5px;
   padding: 20px;
 } 
-
-.accueil {
-    background-color: #00A450;
-}
 
 p.accueil {
   font-size: 24px;
@@ -100,21 +152,21 @@ p.accueil {
 }
 
 .menu {
+  display:flex;
+  justify-content: space-between;
   text-align: center;
-  text-decoration: none!important;
+  text-decoration: none;
 }
 
 img.menu {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
 }
 
 ul.menu {
   /* margin-top: 0px;
   padding-top: 14px;
   background-color: #00A450; */
-  text-align: center;
+  
   padding-left: 0;
   list-style: inside;
   text-decoration: none!important;
@@ -135,7 +187,7 @@ ul.menu {
   text-decoration: none!important;
 }
 .menu > li:hover {
-  background-color: #00A450;
+  background-color: #00A44F;
 }
 
 .menu a:hover {
@@ -143,14 +195,14 @@ ul.menu {
 }
 
 .menuA {
+  display:flex;
+  justify-content: space-between;
   text-align: center;
   text-decoration: none;
 }
 
 img.menuA {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
 }
 
 ul.menuA {
@@ -178,7 +230,7 @@ ul.menuA {
 }
 
 .menuA > li:hover {
-  background-color: #FFEDD2;
+  background-color: #FFEDD1;
 }
 
 .article{
@@ -186,3 +238,36 @@ ul.menuA {
   padding-left: 12.5%;
   padding-right: 12.5%;
 }
+
+table.display {
+  border-collapse: separate;
+  
+  width: 100%;
+  border-spacing: 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  
+}
+table.display td{
+  border-top: 2px solid #000;
+  vertical-align: top;
+}
+
+table.display td:nth-child(1) {
+  font-size: x-large; 
+  font-weight: bold;
+  width: 15%; /* adjust as needed */
+}
+table.display td:nth-child(2) {
+  font-size: x-large; 
+  font-weight: bold;
+  width: 35%; /* adjust as needed */
+}
+
+table.display td:nth-child(3) {
+  font-size: regular; 
+  font-weight: 600;
+  width: 50%; /* adjust as needed */
+}
+
