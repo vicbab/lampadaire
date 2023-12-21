@@ -12,25 +12,42 @@
 
 <body>
 	<div class="corps">
-	{% include "header.html" %}
+		{% include "header.html" %}
 
-	<h1><a href="{{author['authorslug']}}.html">{{author['author']['forname']}} {{author['author']['surname']}} {%if author['author']['orcid']%}
-		<a href="https://orcid.org/{{author['author']['orcid']}}">
-			<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
-				height="16" />
-		</a>
-		{%endif%}{%if author['author']['affiliations'] %} ({{author['author']['affiliations']}})
-			{%endif%}
-		</a></h1>
+		<table class="table-equal">
+			<tr style="height:600px;">
+				<td>
+					<a href="{{author['authorslug']}}.html">{{author['author']['forname']}}
+						{{author['author']['surname']}} {%if author['author']['orcid']%}
+						<a href="https://orcid.org/{{author['author']['orcid']}}">
+							<img alt="ORCID logo"
+								src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
+								height="16" />
+						</a>
+						{%endif%}{%if author['author']['affiliations'] %}<br><h1>{{author['author']['affiliations']}}</h1>
+						{%endif%}
+					</a>
+				</td>
+				<td>
+					{%if author['author']['biography'] %}<p>{{author['author']['biography']|safe}}</p>{%endif%}<br><br>
+					<table class="display-articles">
 
-	{%if author['author']['biography'] %}<p>{{author['author']['biography']|safe}}</p>{%endif%}
+						{% for a in author['articles'] %}
+						<tr>
+							<td><h3>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
+										href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></h3></td>
+						</tr>
+						{% endfor%}
+					</table>
+
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
 	<!-- Liste articles: -->
-	<ul>
-		{% for a in author['articles'] %}
-		<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
-					href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
-		{% endfor%}
-	</ul></div>
+
 	{% include "footer.html" %}
 </body>
 

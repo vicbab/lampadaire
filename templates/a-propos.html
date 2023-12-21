@@ -7,18 +7,59 @@
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 </head>
 
-<body>
-	<div class="corps">
-	{% include "header.html" %}
+<body class="bodyA-propos">
+    <div class="a-propos">
+        {% include "header.html" %}
 
-	<h1>À propos</h1>
+        <div class="flex-container">
+            <div style="flex: 1; vertical-align: top;">
+                <h1 class="huger">S'éclairer avec la philosophie</h1>
+            </div>
+            <div class="content">
+                Lampadaire est la revue grand public de la Société
+                de philosophie du Québec (SPQ). Elle
+                publie des articles de vulgarisation philosophique dans le but d’ouvrir un espace de discussion
+                et d’échanges au
+                sein de la communauté philosophique du Québec et de promouvoir le travail de celle-ci auprès du
+                grand public.<br><br>Elle
+                s’adresse à l’ensemble des individus intéressés par la recherche et l’enseignement en
+                philosophie et par les enjeux
+                philosophiques soulevés par la société contemporaine. Lampadaire est une revue numérique
+                gratuite. Elle publie
+                exclusivement des articles en français.
+            </div>
+        </div>
 
-	{{contenu|safe}}
-</div>
-	{% include "footer.html" %}
+        <div class="flex-container" style="align-items: flex-end; padding-bottom: 20px;">
+            <div style="flex: 1;"><img src="/static/media/lampadaire_allume.svg" style="height=100%; padding-bottom: 10px;"></div>
+            <div style="flex: 1; display: flex; flex-direction: column;">
+                <h1 style="font-weight: 650; font-size:30px;">Équipe</h1>
+                <ul class="spaced">
+                    <li>Marie Laplante-Anfossi</li>
+                    <li>Directrice et responsable du financement</li>
+                    <li>Étienne Groleau</li>
+                    <li>Responsable des dossiers thématiques</li>
+                    <li>Justine Perron</li>
+                    <li>Responsable de la section hors-thème</li>
+                    <li>Victor Babin</li>
+                    <li>Responsable web</li>
+                    <li>Mathilda Mille</li>
+                    <li>Responsable des communications</li>
+                </ul>
+                <div style="display: flex; flex-direction: column; height: 100%; justify-content: flex-end;">
+                    <h1 style="font-weight: 650; font-size:30px;">Contact</h1>
+                    <p class="content" style="margin-bottom: 0px;">Pour toute demande de collaboration ou toute demande d'information
+                        relative à un emploi
+                        au sein
+                        de l'équipe de la revue, veuillez communiquer avec nous à l'adresse suivante:<br><a
+                            href="mailto:info@lampadaire.ca">info@lampadaire.ca</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% include "footer.html" %}
 </body>
 
 </html>

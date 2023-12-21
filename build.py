@@ -11,7 +11,7 @@ freezer = Freezer(app)
 def article():
     print("generating articles")
     if config.dynamic:
-        data = tools.retrievetags("both")
+        data = tools.retrievetags("article")
     else:
         data = json.load(open('caches/articles.json','r'))
     for article in data :
@@ -19,6 +19,19 @@ def article():
             yield {'myid': article['id']}
         else:    
             yield {'myid': article['myid']}
+
+@freezer.register_generator
+def appel():
+    print("generating appels")
+    if config.dynamic:
+        data = tools.retrievetags("appel")
+    else:
+        data = json.load(open('caches/appels.json','r'))
+    for appel in data :
+        if appel['myid'] == '':
+            yield {'myid': appel['id']}
+        else:    
+            yield {'myid': appel['myid']}
 
 @freezer.register_generator
 def dossier():

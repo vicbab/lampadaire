@@ -1,25 +1,41 @@
 <html>
-	<head>
-		<link href="../static/css/style.css" rel="stylesheet">
-		<link rel="preconnect" href="https://rsms.me/">
-		<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
-		<title>{{title|striptags}}</title>
-		<link rel="icon" type="image/png" href="../static/media/favicon.png">
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-	</head>
-	<body>
-		<div class="corps">
+<head>
+	<link href="../static/css/style.css" rel="stylesheet">
+	<link rel="preconnect" href="https://rsms.me/">
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<title>{{title|striptags}}</title>
+	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body>
+	<div class="corps">
 		{% include "header.html" %}
-<h1>{{mydossier['dossier']['title_f']}}</h1>
+		<h1 class="huge">No. {{mydossier['dossier']['id'][0:2]}}: {{mydossier['dossier']['title_f']}}</h1>
 
-<!-- Liste articles: -->
-<ul>
-{% for a in mydossier['articles'] %}
-<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
-{% endfor%}
-</ul>
-</div>
-{% include "footer.html" %}
-	</body>
+		<!-- Liste articles: -->
+		<table class="display-articles">
+            {% for a in mydossier['articles'] %}
+            <tr>
+                <td>{{a['myid'][0:2]}}</td>
+                <td><div style="width: 66.6%">{%if a['myid'] != ''%}<a href="../articles/{{a['myid']}}.html">{{a['title'] |
+                        striptags}}</a><br>{%endif%}</div></td>
+				<td>{{a['authors'] | safe }}</td>
+                <td>{{a['keywords'] | safe}}</td>
+                <td>{{a['date']}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+		<!-- <ul>
+			{% for a in mydossier['articles'] %}
+			<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
+						href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
+			{% endfor%}
+		</ul> -->
+	</div>
+	{% include "footer.html" %}
+</body>
+
 </html>

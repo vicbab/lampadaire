@@ -1,6 +1,6 @@
 Chaque numéro de la revue comporte une section thématique et une section hors-thème.
 
-Veuillez envoyer vos textes à l’adresse : [info[at]lampadaire.ca][mail]. Prière d’indiquer votre nom, la rubrique choisie, votre affiliation institutionnelle et votre programme d’étude (si applicables) dans le courriel de soumission. Veuillez prendre note que seuls les fichiers .doc, .docx et .odt sont acceptés, sauf pour la rubrique Créative, pour laquelle les fichiers .pdf sont aussi acceptés.
+Veuillez envoyer vos textes à l’adresse : [info[at]lampadaire.ca][mail]. Prière d’indiquer votre nom, la rubrique choisie, votre affiliation institutionnelle et votre programme d’étude (si applicables) dans le courriel de soumission. Veuillez prendre note que seuls les fichiers .doc, .docx, .odt et .md sont acceptés, sauf pour la rubrique Créative, pour laquelle les fichiers .pdf sont aussi acceptés.
 
 ## Section thématique
 
@@ -19,7 +19,7 @@ Les personnes intéressées peuvent soumettre leur texte en lien avec la thémat
 ### Créative
 
 - **Longueur des articles :** 1-3 pages
-- **Description :** Espace accessible et ouvert aux réflexions philosophiques de tout acabit soulevées par la thématique du dossier. Les propositions ayant une forme moins conventionnelle en philosophie sont encouragées (bande dessinée, fiction, poésie, conte, etc.)..
+- **Description :** Espace accessible et ouvert aux réflexions philosophiques de tout acabit soulevées par la thématique du dossier. Les propositions ayant une forme moins conventionnelle en philosophie sont encouragées (bande dessinée, fiction, poésie, conte, etc.).
 
 ### Collégiale
 

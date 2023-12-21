@@ -6,23 +6,23 @@
 	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
 	<div class="corps">
 	{% include "header.html" %}
 
-	<h1>Appels de textes</h1>
-
-	<ul>
+	<table class="display">
 		{%for i in data%}
-		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
-					href="articles/{{i['myid']}}.html">{%endif%}{{i['title']|safe}}</a></li>
-
-
-		{%endfor%}
-	</ul>
-
+		<tr>
+			<td>{%if i['myid'] == ''%}<a href="appels/{{i['id']}}.html">{%else%}<a
+				href="appels/{{i['myid']}}.html">{%endif%}No. {{i['myid'][0:2]}}</a></td>
+			<td>{%if i['myid'] == ''%}<a href="appels/{{i['id']}}.html">{%else%}<a
+				href="appels/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></td>
+			{%endfor%}
+		</tr>
+	</table>
 </div>
 		{% include "footer.html" %}
 </body>

@@ -11,11 +11,16 @@
 	<body>
 		<div class="corps">
 		{% include "header.html" %}
-
-<h1>Contribuer</h1>
-
-{{contenu|safe}}
-
-	</body></div>
-	{% include "footer.html" %}
+		<div class="flex-container-contenu">
+			<div>
+				<h1 class="huger">Contribuer</h1>
+			</div>
+			<div>
+				{{contenu|safe}}
+			</div>
+		</div>
+		</div>
+		{% include "footer.html" %}
+	</body>
+	
 </html>

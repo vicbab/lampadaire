@@ -14,24 +14,12 @@
 	{% include "headerA.html" %}
 	<!-- <h1>{{title}}</h1>
 -->
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
-	<br>
 	<!-- <h2>à propos</h2> -->
-	<h1 class="huge">
-		Revue grand public de la <a href="https://laspq.org">Société de philosophie du Québec
+	<span class="tagline" style="margin-top: 200px; text-align: left; width: 100%;">
+		Revue grand public de la <a href="https://laspq.org" target="_blank">Société de philosophie du Québec
 			(SPQ)</a>.
-		</h1>
-		<br><br>
+		</span>
+		<br><br><br><br><br>
 
 	<!-- <a href="motscles/index.html">Mots-clés</a>
 <a href="dossiers/index.html">Dossiers</a> -->
@@ -39,47 +27,13 @@
 <table class="display">
 	{%for d in dossiers | reverse %}
 	<tr>
-		<td >No. {{d['dossier']['id'][0:2]}}</td>
+		<td ><a>No. {{d['dossier']['id'][0:2]}}</a></td>
 		<td><a href="dossiers/{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></td>
-		<td>{% for a in d['articles'] %}
-			{%if a['myid'] != ''%}
-				<a href="../articles/{{a['myid']}}.html">{{a['display'] | striptags}}</a><br>
-			{%endif%}
-		{%endfor%}</td>
+		<td>{% for a in appels %}{% if a['myid'][0:2] == d['dossier']['id'][0:2] %}{% if a['yaml']['abstract'][0]['text_f'] != "" %}{{a['yaml']['abstract'][0]['text_f'][0:300]}}{%endif%}{%endif%}{%endfor%}</td>
 	</tr>
 	{%endfor%}
 </table>
-	<!-- <br>
 
-	<h2>Articles récents</h2>
-	<ul>
-		{%for i in articles%}
-		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
-					href="articles/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></li>
-
-
-		{%endfor%}
-	</ul>
-
-
-	<h2>Appels de textes récents</h2>
-	<ul>
-		{%for i in appels%}
-		<li style="font-size: large;">{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a
-					href="articles/{{i['myid']}}.html">{%endif%} {{i['display']|striptags}}</a></li>
-
-
-		{%endfor%}
-	</ul>
-
-	<h2>Numéros récents</h2>
-	<ul>
-		{%for d in dossiers%}
-		<li style="font-size: large;"><a href="dossiers/{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></li>
-
-
-		{%endfor%}
-	</ul> -->
 </div>
 	{% include "footer.html" %}</body>
 </html>

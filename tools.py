@@ -155,6 +155,8 @@ def retrievetags(type):
             try:  
                 for tag in article['tags']:
                     if tag['name'] in tagNames:
+                        #print("found")
+                        #print(article['title'])
                         titledoc=article['title']
 
                         idart= article['_id'] 
@@ -176,6 +178,7 @@ def retrievetags(type):
 
                         if skipAuthors:
                             display = title
+                            authors = ""
                         else:
                             authors = yaml['authors']
                             display = getdisplay(authors, title)
@@ -183,7 +186,7 @@ def retrievetags(type):
                         # authors = yaml['authors']
                         # display = getdisplay(authors, title)
 
-                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display} 
+                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display, 'tags':tag['name'], 'authors':authors} 
 
                         if dictart not in articles:
                             articles.append(dictart)
@@ -211,7 +214,7 @@ def retrievetags(type):
                     #     if dictart not in articles:
                     #         articles.append(dictart)             
             except:
-                # traceback.print_exc()
+                #traceback.print_exc()
                 continue
             
 
@@ -255,30 +258,50 @@ def retrievekeywords():
 def retrievedossiers():
     dossiers=[]
     for article in retrievetags("article"):
-        
         article_id = article['id']
         myid = article['myid']
         dossier = article['yaml']['dossier']
         title= article['title']
-        authors = article['yaml']['authors']
-        display = getdisplay(authors, title)
+        authors = formatnameslinks(makeauthors(article))
+        display = getdisplay(makeauthors(article), title)
+        keywords = formatkeywords(article['yaml']['keywords'])
+        try:
+            date = formatDate(article['yaml']['date'])
+        except:
+            date = ""
        
         # print(article['authors'])
-        articles_list={'myid':myid,'id':article_id, 'title':title, 'display':display}
+        articles_list={'myid':myid,'id':article_id, 'title':title, 'display':display, 'authors':authors, 'keywords':keywords, 'date':date, 'yaml':article['yaml']}
         dictdossier = {'dossier': dossier[0], 'articles': articles_list}
         dossiers.append(dictdossier)
                         
      
     return dossiers
+
+def formatkeywords(keywords):
+    keywords_list = []
+    for keyword in keywords:
+        for keyword_f in keyword['list_f']:
+            keywords_list.append(keyword_f)
+    return ', '.join(keywords_list)
+
+
+def formatDate(date):
+    date = date.split('-')
+    if len(date) == 3:
+        return date[2] + "." + date[1] + "." + date[0]
+    else:
+        return date[1] + "." + date[0]
+
 def getdisplay(authors, title):
     authors_list = []
     for author in authors:
         try:
-            surname = author['surname']
+            surname = author['author']['surname']
         except:
             surname = ""
         try:
-            forname = author['forname']
+            forname = author['author']['forname']
         except:
             forname = ""
         name = forname + " " + surname
@@ -290,17 +313,17 @@ def getdisplay(authors, title):
 
     return names + title
 def formatnames(authors):
-    names = ""
-    i = 1
-    for author in authors:
-        names = names + author['name']
-        
-        if i < len(authors):
-            names = names + " et "
-        i += 1
-
-    names = names + ", "    
+    names = " et ".join(author['name'] for author in authors)
+    names += ", "
     return names
+
+def formatnameslinks(authors):
+    names = []
+    for author in authors:
+        name = "<a href=" + "/auteurices/{}.html>{}</a>".format(author['authorslug'], author['author']["forname"] + " " + author['author']["surname"])
+        names.append(name)
+    return ' et '.join(names) #doesnt work for 3+ authors
+
 def retrieveauthors():
     authors_list=[]
     for article in retrievetags("article"):
@@ -319,6 +342,25 @@ def retrieveauthors():
         except:
             continue
 
+     
+    return authors_list
+
+def makeauthors(article):
+    authors_list=[]
+    article_id = article['id']
+    myid = article['myid']
+    try:
+        authors = article['yaml']['authors']
+        for author in authors:
+            title= article['title']
+            articles_list={'myid':myid,'id':article_id, 'title':title}
+            authornslug = slugify(author['surname'])
+            authorfslug = slugify(author['forname'])
+            authorslug= authornslug+'-'+authorfslug
+            dictauthor = {'author': author, 'authorslug':authorslug, 'articles': articles_list}
+            authors_list.append(dictauthor)
+    except:
+        pass
      
     return authors_list
 

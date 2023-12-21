@@ -1,0 +1,46 @@
+<html>
+
+<head>
+    <link href="../static/css/style.css" rel="stylesheet">
+    <link rel="preconnect" href="https://rsms.me/">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <title>{{title|striptags}}</title>
+    <link rel="icon" type="image/png" href="../static/media/favicon.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+
+<body>
+    <div class="corps">
+        {% include "header.html" %}
+
+        <!-- <div class="huger">Articles</div> -->
+
+        <ul class="menuArticles" style="margin-top: 20px; margin-bottom: 50px;">
+            <li style="margin-left: 0;  font-size: 25px;"><a href="/dossiers/index.html">Numéros</a></li>
+            <li style="font-size: 25px;"><a href="/auteurices/index.html">Auteurices</a></li>
+            <li style="margin-right: 0; font-size: 25px;"><a href="/motscles/index.html">Mots-clés</a></li>
+        </ul>
+
+        <table class="display-articles">
+            {%for d in dossiers | reverse %}
+            {% for a in d['articles'] %}
+            <tr>
+                <td>No. {{d['dossier']['id'][0:2]}}</td>
+                <td><div style="width: 66.6%">{%if a['myid'] != ''%}<a href="../articles/{{a['myid']}}.html">{{a['title'] |
+                        striptags}}</a><br>{%endif%}</div></td>
+                <td>{{a['authors'] | safe }}</td>
+                <td>{{a['keywords'] | safe}}</td>
+                <td>{{a['date']}}</td>
+            </tr>
+            {%endfor%}
+            {% endfor %}
+        </table>
+
+        
+
+    </div>
+    {% include "footer.html" %}
+</body>
+
+</html>

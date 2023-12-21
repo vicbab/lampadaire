@@ -27,35 +27,36 @@ def homepage(): # la fonction qui sert les données pour la route /
     else:
         # TODO: fix ceci pour match avec les nouvelles fonctions
         data = json.load(open('caches/articles.json','r'))
-    return render_template('index.html', title=config.title, articles=articles, appels=appels, dossiers=dossiers)
+    return render_template('index.html', title=config.title, current_page='home', articles=articles, appels=appels, dossiers=dossiers)
 
 @app.route('/contribuer.html') # route où seront servies ces données
 def contribuer(): # la fonction qui sert les données pour la route /
     page = "static/pages/contribuer.md"
     contenu = pypandoc.convert_file(page, 'html', format='md')
 
-    return render_template('contribuer.html', title=config.title, contenu=contenu)
+    return render_template('contribuer.html', current_page='contribuer', title=config.title, contenu=contenu)
 
 @app.route('/a-propos.html') # route où seront servies ces données
 def aboutpage(): # la fonction qui sert les données pour la route /
     page = "static/pages/a-propos.md"
     contenu = pypandoc.convert_file(page, 'html', format='md')
-    return render_template('a-propos.html', title="à propos - revue lampadaire", contenu = contenu)
+    return render_template('a-propos.html', current_page='a-propos', title="À propos - Lampadaire", contenu = contenu)
 
 @app.route('/appels.html') # route où seront servies ces données
 def appels(): # la fonction qui sert les données pour la route /
     if config.dynamic:
         data = tools.retrievetags("appel")
+        data = sorted(data, key=lambda item: item['myid'], reverse=True)
     else:
         data = json.load(open('caches/appels.json','r'))
-    return render_template('appels.html', title="appels de textes - revue lampadaire", data=data)
+    return render_template('appels.html', current_page='appels', title="Appels de textes - Lampadaire", data=data)
 
 @app.route('/contact.html') # route où seront servies ces données
 def contact(): # la fonction qui sert les données pour la route /
     page = "static/pages/contact.md"
     contenu = pypandoc.convert_file(page, 'html', format='md')
 
-    return render_template('contact.html', title="contact - revue lampadaire", contenu=contenu)
+    return render_template('contact.html', current_page='a-propos', title="Contact - Lampadaire", contenu=contenu)
 
 @app.route('/articles/<myid>.html')
 def article(myid):
@@ -118,7 +119,7 @@ def article(myid):
     except:
         mydossier = ''
 
-    return render_template('article.html', myarticle=myarticle, data=data, yaml=yaml,title=title, abstract_fr=abstract_fr, abstract_en=abstract_en, authors=authors, myid=myid, mydossier=mydossier)
+    return render_template('article.html', current_page='article', myarticle=myarticle, data=data, yaml=yaml,title=title, abstract_fr=abstract_fr, abstract_en=abstract_en, authors=authors, myid=myid, mydossier=mydossier)
 
 @app.route('/downloads/<myid>')
 def articlepdf(myid):
@@ -128,7 +129,7 @@ def articlepdf(myid):
     myid=alldata[1]
     id = alldata[3]
     version=alldata[4]
-    # print(myid,id,version)
+    print(myid,id,version)
     tools.getpdf(id,myid,version)
     #For windows you need to use drive name [ex: F:/Example.pdf]
     path = os.path.join('downloads', f'{myid}.pdf')
@@ -158,7 +159,7 @@ def keywords(): # la fonction qui sert les données pour la route /
         data = json.load(open('caches/keywords.json','r'))
 
     data = sorted(data, key=lambda k: k['name']) 
-    return render_template('motscles.html', title="mots-clés - revue lampadaire", data=data)
+    return render_template('motscles.html', current_page='articles', title="Mots-clés - Lampadaire", data=data)
 
 @app.route('/motscles/<name>.html')
 def keyword(name):
@@ -171,18 +172,18 @@ def keyword(name):
     for k in data:
         if k['nameslug'] == name:
             mykeyword = k
-    return render_template('motcle.html', title= name + " - revue lampadaire", mykeyword=mykeyword)
+    return render_template('motcle.html', current_page='articles', title= name + " - Lampadaire", mykeyword=mykeyword)
 
-@app.route('/authors/index.html') # route où seront servies ces données
+@app.route('/auteurices/index.html') # route où seront servies ces données
 def authors(): # la fonction qui sert les données pour la route /
     if config.dynamic:
         data = tools.setauthors()
     else:
         data = json.load(open('caches/authors.json','r'))
 
-    return render_template('authors.html', title="auteurices - revue lampadaire", data=data)
+    return render_template('authors.html', current_page='articles', title="Auteurices - Lampadaire", data=data)
 
-@app.route('/authors/<name>.html')
+@app.route('/auteurices/<name>.html')
 def author(name):
 
     if config.dynamic:
@@ -193,7 +194,7 @@ def author(name):
     for a in data:
         if a['authorslug'] == name:
             myauthor = a
-    return render_template('author.html', title= name + " - revue lampadaire", author=myauthor)
+    return render_template('author.html', current_page='articles', title= name + " - Lampadaire", author=myauthor)
 
 @app.route('/dossiers/index.html') # route où seront servies ces données
 def dossiers(): # la fonction qui sert les données pour la route /
@@ -203,20 +204,52 @@ def dossiers(): # la fonction qui sert les données pour la route /
         data = json.load(open('caches/dossiers.json','r'))
 
 
-    return render_template('dossiers.html', data=data)
+    return render_template('dossiers.html', current_page='articles', title="Numéros - Lampadaire", data=data)
 
 @app.route('/dossiers/<idd>.html')
 def dossier(idd):
 
     if config.dynamic:
         data = tools.setdossiers()
+        
     else:
         data = json.load(open('caches/dossiers.json','r'))
     mydossier={}
     for d in data:
         if d['dossier']['id'] == idd:
             mydossier = d 
-    return render_template('dossier.html', mydossier=mydossier)
+    title = mydossier['dossier']['title_f']
+    return render_template('dossier.html', current_page='articles', title = title + " - Lampadaire", mydossier=mydossier)
+
+@app.route('/articles.html') # route où seront servies ces données
+def articles(): # la fonction qui sert les données pour la route /
+    if config.dynamic:
+        articles = tools.retrievetags("article")
+        appels = tools.retrievetags("appel")
+        dossiers = tools.setdossiers()
+        authors = tools.setauthors()
+    else:
+        # TODO: fix ceci pour match avec les nouvelles fonctions
+        data = json.load(open('caches/articles.json','r'))
+    return render_template('articles.html', current_page='articles', title=config.title, articles=articles, appels=appels, dossiers=dossiers, authors=authors)
+
+@app.route('/appels/<myid>.html')
+def appel(myid):
+    alldata=tools.idfrommyid(myid)    # fonction pour récuperer les données d'un article à partir de son id yaml
+    data=alldata[0]
+    myid=alldata[1]
+    yaml=alldata[2]
+   
+    title = pypandoc.convert_text(yaml['title_f'], 'html', format='md') 
+    try:
+        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md', extra_args=['--citeproc', '--bibliography=static/lampadaire.bib', '--csl=https://www.zotero.org/styles/universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie'])
+    except:
+        myarticle = data['data']['article']['workingVersion']['md']
+
+    return render_template('appel.html', current_page='appels', myarticle=myarticle, data=data, yaml=yaml, title=title, myid=myid)
+
+
+
 
 if __name__ == '__main__':
   app.run(debug=True, port=3000)

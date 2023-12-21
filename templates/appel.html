@@ -7,20 +7,20 @@
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
 </head>
-
 <body>
 	<div class="corps">
-	{% include "header.html" %}
-
-	<h1>appels de textes</h1>
-
-	<h2>titre</h2>
-	<p class="appels">texte</p>
-	
-	</div>
-	{% include "footer.html" %}
+		{% include "header.html" %}
+		<div class="flex-container-contenu">
+			<div>
+				<h1 class="huger">{{title|safe}}</h1>
+			</div>
+			<div>
+				{{myarticle|safe}}
+			</div>
+		</div>
+		</div>
+		{% include "footer.html" %}
 </body>
 
 </html>
