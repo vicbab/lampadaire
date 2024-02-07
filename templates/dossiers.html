@@ -26,7 +26,7 @@
             <td>
                 {% for a in d['articles'] %}
                     {%if a['myid'] != ''%}
-                        <a href="../articles/{{a['myid']}}.html">{{a['display'] | striptags}}</a><br>
+                        <a href="../articles/{{a['myid']}}.html">{{a['display'] | striptags}}</a><br style="margin-bottom: 0.75em;">
                     {%endif%}
                 {%endfor%}
             </td>

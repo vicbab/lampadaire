@@ -90,7 +90,7 @@ def article(myid):
     yaml.update({'authors':au_sl})
     title = pypandoc.convert_text(yaml['title_f'], 'html', format='md') 
     try:
-        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md', extra_args=['--citeproc', '--bibliography=static/lampadaire.bib', '--csl=https://www.zotero.org/styles/universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie'])
+        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md', extra_args=['--citeproc', '--bibliography=static/lampadaire.bib', '--csl=https://www.zotero.org/styles/chicago-author-date-fr'])
     except:
         myarticle = data['data']['article']['workingVersion']['md']
     abstract_fr=''

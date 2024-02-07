@@ -16,6 +16,13 @@ body {
   /* text-shadow: -1px -1px #e0e0e0; */
 }
 
+sup { 
+  vertical-align: top; 
+  font:.833em; 
+  padding-left:.3em;
+  position: relative; 
+  top: -0.33em;
+}
 
 .remaining-height {
   flex-grow: 1;
@@ -615,6 +622,15 @@ ul.spaced li:nth-child(even) {
   display: none;
 }
 
+figure{
+  text-align: center;
+}
+
+figcaption {
+  padding-top:1em;
+  font-style: italic;
+}
+
 .lampadaire_allume {
   height: 45%;
   padding-right: 15%;
@@ -633,6 +649,13 @@ ul.spaced li:nth-child(even) {
 
 .footerBody {
   font-size: 20px;
+}
+
+.references.csl-bib-body.hanging-indent{
+  text-indent: -1.5em;
+  padding-left: 1.5em;
+  margin: 0;
+  padding-right:35%;
 }
 
 div.flex-container:nth-child(4)>div:nth-child(2) {

@@ -106,7 +106,7 @@
 	<div class="article">
 		<!-- <h1>{{title|safe}} {{myid}}</h1> -->
 		<h4>{% if yaml['dossier'] %}{% for d in yaml['dossier'] %}No. {{d['id'][0:2]}}{% endfor %}{% endif %}{% if mydossier%} — {{mydossier}}{%endif%}</h4>
-		<h1 class="huge">{{title|safe}}</h1>
+		<h1 class="huge" style="text-align: left;">{{title|safe}}</h1>
 		{%for a in authors%}<a href="../auteurices/{{a.authorslug}}.html"><b>{{a.forname}} {{a.surname}}</b>{%if a['orcid']%}
 			<a href="https://orcid.org/{{a['orcid']}}">
 				<img alt="ORCID logo" src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
