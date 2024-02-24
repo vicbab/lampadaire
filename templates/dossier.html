@@ -13,21 +13,44 @@
 <body>
 	<div class="corps">
 		{% include "header.html" %}
-		<h1 class="huge">No. {{mydossier['dossier']['id'][0:2]}}: {{mydossier['dossier']['title_f']}}</h1>
+		<!--Section thématique-->
+		<h1 class="huge">No. {{mydossier['dossier']['id'][0:2]}} — {{mydossier['dossier']['title_f']}}</h1>
 
 		<!-- Liste articles: -->
 		<table class="display-articles">
-            {% for a in mydossier['articles'] %}
+            {% for a in mydossier['articles'] | sort(attribute="keywords.0") %}
             <tr>
-                <td>{{a['myid'][0:2]}}</td>
+                <!-- <td>{{a['myid'][0:2]}}</td> -->
+				<td></td>
                 <td><div style="width: 66.6%">{%if a['myid'] != ''%}<a href="../articles/{{a['myid']}}.html">{{a['title'] |
                         striptags}}</a><br>{%endif%}</div></td>
 				<td>{{a['authors'] | safe }}</td>
-                <td>{{a['keywords'] | safe}}</td>
+                {% set keywords_list = a['keywords'].split(',') %}
+				<td>{{ keywords_list[0]|safe }}</td>
                 <td>{{a['date']}}</td>
             </tr>
             {%endfor%}
         </table>
+		<!--Section hors-thème-->
+		{% if horsdossier | length > 0  %}
+		<h1 class="huge">No. {{horsdossier['dossier']['id'][0:2]}} — {{horsdossier['dossier']['title_f']}}</h1>
+
+		<!-- Liste articles: -->
+		<table class="display-articles">
+            {% for a in horsdossier['articles'] | sort(attribute="keywords.0") %}
+            <tr>
+                <!-- <td>{{a['myid'][0:2]}}</td> -->
+				<td></td>
+                <td><div style="width: 66.6%">{%if a['myid'] != ''%}<a href="../articles/{{a['myid']}}.html">{{a['title'] |
+                        striptags}}</a><br>{%endif%}</div></td>
+				<td>{{a['authors'] | safe }}</td>
+                {% set keywords_list = a['keywords'].split(',') %}
+				<td>{{ keywords_list[0]|safe }}</td>
+                <td>{{a['date']}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+		{% endif %}
 		<!-- <ul>
 			{% for a in mydossier['articles'] %}
 			<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a

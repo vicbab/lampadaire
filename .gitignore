@@ -6,3 +6,5 @@ caches/
 __pycache__/
 .ipynb_checkpoints
 static/media/media_articles
+/templates/TODO.md
+downloads

@@ -76,7 +76,7 @@ def getpdf(article, myid, version):
                 "with_toc": 0,
                 "with_ascii": 0,
                 "version": version,
-                "bibliography_style": "universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie",
+                "bibliography_style": "chicagomodified",
                 "formats": "pdf",
                 }
     r = requests.get(url,params)

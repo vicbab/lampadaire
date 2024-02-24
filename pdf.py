@@ -7,67 +7,67 @@ import os
 
 freezer = Freezer(app)
 
-@freezer.register_generator
-def article():
-    print("generating articles")
-    if config.dynamic:
-        data = tools.retrievetags("article")
-    else:
-        data = json.load(open('caches/articles.json','r'))
-    for article in data :
-        if article['myid'] == '':
-            yield {'myid': article['id']}
-        else:    
-            yield {'myid': article['myid']}
+# @freezer.register_generator
+# def article():
+#     print("generating articles")
+#     if config.dynamic:
+#         data = tools.retrievetags("article")
+#     else:
+#         data = json.load(open('caches/articles.json','r'))
+#     for article in data :
+#         if article['myid'] == '':
+#             yield {'myid': article['id']}
+#         else:    
+#             yield {'myid': article['myid']}
 
-@freezer.register_generator
-def appel():
-    print("generating appels")
-    if config.dynamic:
-        data = tools.retrievetags("appel")
-    else:
-        data = json.load(open('caches/appels.json','r'))
-    for appel in data :
-        if appel['myid'] == '':
-            yield {'myid': appel['id']}
-        else:    
-            yield {'myid': appel['myid']}
+# @freezer.register_generator
+# def appel():
+#     print("generating appels")
+#     if config.dynamic:
+#         data = tools.retrievetags("appel")
+#     else:
+#         data = json.load(open('caches/appels.json','r'))
+#     for appel in data :
+#         if appel['myid'] == '':
+#             yield {'myid': appel['id']}
+#         else:    
+#             yield {'myid': appel['myid']}
 
-@freezer.register_generator
-def dossier():
-    print("generating dossiers")
-    if config.dynamic:
-        print("dynamic: setting dossiers")
-        data = tools.setdossiers()
-    else:
-        print("static: loading dossiers")
-        data = json.load(open('caches/dossiers.json','r'))
-    for d in data :
-        yield {'idd': d['dossier']['id']}
+# @freezer.register_generator
+# def dossier():
+#     print("generating dossiers")
+#     if config.dynamic:
+#         print("dynamic: setting dossiers")
+#         data = tools.setdossiers()
+#     else:
+#         print("static: loading dossiers")
+#         data = json.load(open('caches/dossiers.json','r'))
+#     for d in data :
+#         yield {'idd': d['dossier']['id']}
 
-@freezer.register_generator
-def keyword():
-    print("generating keywords")
-    if config.dynamic:
-        print("dynamic: setting keywords")
-        data = tools.setkeywords()
-    else:
-        print("static: loading keywords")
-        data = json.load(open('caches/keywords.json','r'))
-    for d in data :
-        yield {'name': d['nameslug']}
+# @freezer.register_generator
+# def keyword():
+#     print("generating keywords")
+#     if config.dynamic:
+#         print("dynamic: setting keywords")
+#         data = tools.setkeywords()
+#     else:
+#         print("static: loading keywords")
+#         data = json.load(open('caches/keywords.json','r'))
+#     for d in data :
+#         yield {'name': d['nameslug']}
 
-@freezer.register_generator
-def author():
-    print("generating authors")
-    if config.dynamic:
-        print("dynamic: setting authors")
-        data = tools.setauthors()
-    else:
-        print("static: loading authors")
-        data = json.load(open('caches/authors.json','r'))
-    for d in data :
-        yield {'name': d['authorslug']}
+# @freezer.register_generator
+# def author():
+#     print("generating authors")
+#     if config.dynamic:
+#         print("dynamic: setting authors")
+#         data = tools.setauthors()
+#     else:
+#         print("static: loading authors")
+#         data = json.load(open('caches/authors.json','r'))
+#     for d in data :
+#         yield {'name': d['authorslug']}
 
 @freezer.register_generator
 def articlepdf():

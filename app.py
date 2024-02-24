@@ -215,11 +215,15 @@ def dossier(idd):
     else:
         data = json.load(open('caches/dossiers.json','r'))
     mydossier={}
+    horsdossier={}
     for d in data:
         if d['dossier']['id'] == idd:
             mydossier = d 
+        elif d['dossier']['id'] == idd[0:2] + "-ht":
+            horsdossier = d
+    
     title = mydossier['dossier']['title_f']
-    return render_template('dossier.html', current_page='articles', title = title + " - Lampadaire", mydossier=mydossier)
+    return render_template('dossier.html', current_page='articles', title = title + " - Lampadaire", mydossier=mydossier, horsdossier=horsdossier)
 
 @app.route('/articles.html') # route où seront servies ces données
 def articles(): # la fonction qui sert les données pour la route /
@@ -242,7 +246,7 @@ def appel(myid):
    
     title = pypandoc.convert_text(yaml['title_f'], 'html', format='md') 
     try:
-        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md', extra_args=['--citeproc', '--bibliography=static/lampadaire.bib', '--csl=https://www.zotero.org/styles/universite-du-quebec-a-montreal-etudes-litteraires-et-semiologie'])
+        myarticle = pypandoc.convert_text(data['data']['article']['workingVersion']['md'], 'html', format='md', extra_args=['--citeproc', '--bibliography=static/lampadaire.bib', '--csl=https://www.zotero.org/styles/chicago-author-date-fr'])
     except:
         myarticle = data['data']['article']['workingVersion']['md']
 
