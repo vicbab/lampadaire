@@ -7,6 +7,7 @@
 	<title>{{title|striptags}}</title>
 	<link rel="icon" type="image/png" href="../static/media/favicon.png">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body class="bodyA">
@@ -15,7 +16,7 @@
 	<!-- <h1>{{title}}</h1>
 -->
 	<!-- <h2>à propos</h2> -->
-	<span class="tagline" style="margin-top: 200px; text-align: left; width: 100%;">
+	<span class="tagline" style="text-align: left; width: 100%;">
 		Revue grand public de la <a href="https://laspq.org" target="_blank">Société de philosophie du Québec
 			(SPQ)</a>
 		</span>
@@ -28,7 +29,7 @@
 	{%for d in dossiers | reverse %}
 	{% if d['dossier']['id'][3:5] != 'ht'%}
 	<tr>
-		<td ><a>No. {{d['dossier']['id'][0:2]}}</a></td>
+		<td >No. {{d['dossier']['id'][0:2]}}</td>
 		<td><a href="dossiers/{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></td>
 		<td>{% for a in appels %}{% if a['myid'][0:2] == d['dossier']['id'][0:2] %}{% if a['yaml']['abstract'][0]['text_f'] != "" %}{{a['yaml']['abstract'][0]['text_f'][0:300]}}{%endif%}{%endif%}{%endfor%}</td>
 		<!-- <td>{% if d['dossier']['id'][3:5] != 'aa'%}{% for a in appels %}{% if a['myid'][0:2] == d['dossier']['id'][0:2] %}{% if a['yaml']['abstract'][0]['text_f'] != "" %}{{a['yaml']['abstract'][0]['text_f'][0:300]}}{%endif%}{%endif%}{%endfor%}{%endif%}{%if d['dossier']['id'][3:5] == 'aa' %}{{""}}{%endif%}</td> -->
