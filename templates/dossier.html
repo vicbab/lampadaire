@@ -1,17 +1,64 @@
 <html>
-	<head>
-		<link href="../static/css/style.css" rel="stylesheet">
-	</head>
-	<body>
-		{% include "header.html" %}
-<h1>{{mydossier['dossier']['title_f']}}</h1>
 
-Liste articles:
-<ul>
-{% for a in mydossier['articles'] %}
-<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
-{% endfor%}
-</ul>
-{% include "footer.html" %}
-	</body>
+<head>
+	<link href="../static/css/style.css" rel="stylesheet">
+	<link rel="preconnect" href="https://rsms.me/">
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<title>{{title|striptags}}</title>
+	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+	<div class="corps">
+		{% include "header.html" %}
+		<!--Section thématique-->
+		<h1 class="huge">No. {{mydossier['dossier']['id'][0:2]}} — {{mydossier['dossier']['title_f']}}</h1>
+
+		<!-- Liste articles: -->
+		<table class="display-articles">
+            {% for a in mydossier['articles'] | sort(attribute="keywords.0") %}
+            <tr>
+                <!-- <td>{{a['myid'][0:2]}}</td> -->
+				<td></td>
+                <td><div style="width: 66.6%">{%if a['myid'] != ''%}<a href="../articles/{{a['myid']}}.html">{{a['title'] |
+                        striptags}}</a><br>{%endif%}</div></td>
+				<td>{{a['authors'] | safe }}</td>
+                {% set keywords_list = a['keywords'].split(',') %}
+				<td>{{ keywords_list[0]|safe }}</td>
+                <td>{{a['date']}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+		<!--Section hors-thème-->
+		{% if horsdossier | length > 0  %}
+		<h1 class="huge">No. {{horsdossier['dossier']['id'][0:2]}} — {{horsdossier['dossier']['title_f']}}</h1>
+
+		<!-- Liste articles: -->
+		<table class="display-articles">
+            {% for a in horsdossier['articles'] | sort(attribute="keywords.0") %}
+            <tr>
+                <!-- <td>{{a['myid'][0:2]}}</td> -->
+				<td></td>
+                <td><div style="width: 66.6%">{%if a['myid'] != ''%}<a href="../articles/{{a['myid']}}.html">{{a['title'] |
+                        striptags}}</a><br>{%endif%}</div></td>
+				<td>{{a['authors'] | safe }}</td>
+                {% set keywords_list = a['keywords'].split(',') %}
+				<td>{{ keywords_list[0]|safe }}</td>
+                <td>{{a['date']}}</td>
+            </tr>
+            {%endfor%}
+        </table>
+		{% endif %}
+		<!-- <ul>
+			{% for a in mydossier['articles'] %}
+			<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
+						href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
+			{% endfor%}
+		</ul> -->
+	</div>
+	{% include "footer.html" %}
+</body>
+
 </html>

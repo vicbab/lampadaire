@@ -2,28 +2,52 @@
 
 <head>
 	<link href="/static/css/style.css" rel="stylesheet">
+	<link rel="preconnect" href="https://rsms.me/">
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<title>{{title|striptags}}</title>
+	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
-	{% include "header.html" %}
+	<div class="corps">
+		{% include "header.html" %}
 
-	<h1><a href="{{author['author']['surname']}}-{{author['author']['forname']}}.html">{{author['author']['surname']}},
-			{{author['author']['forname']}}{%if author['author']['affiliations'] %}, Affiliation:
-			{{author['author']['affiliations']}}
-			{%endif%}
-			{%if author['author']['orcid']%}, ORCID:
-			{{author['author']['orcid']}}
-			{%endif%}
-		</a></h1>
+		<table class="table-equal">
+			<tr style="height:600px;">
+				<td>
+					<a href="{{author['authorslug']}}.html">{{author['author']['forname']}}
+						{{author['author']['surname']}} {%if author['author']['orcid']%}
+						<a href="https://orcid.org/{{author['author']['orcid']}}">
+							<img alt="ORCID logo"
+								src="https://info.orcid.org/wp-content/uploads/2019/11/orcid_16x16.png" width="16"
+								height="16" />
+						</a>
+						{%endif%}{%if author['author']['affiliations'] %}<br><h1>{{author['author']['affiliations']}}</h1>
+						{%endif%}
+					</a>
+				</td>
+				<td>
+					{%if author['author']['biography'] %}<p>{{author['author']['biography']|safe}}</p>{%endif%}<br><br>
+					<table class="display-articles">
 
-	{%if author['author']['biography'] %}<p>{{author['author']['biography']|safe}}</p>{%endif%}
-	Liste articles:
-	<ul>
-		{% for a in author['articles'] %}
-		<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
-					href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
-		{% endfor%}
-	</ul>
+						{% for a in author['articles'] %}
+						<tr>
+							<td><h3>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a
+										href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></h3></td>
+						</tr>
+						{% endfor%}
+					</table>
+
+				</td>
+			</tr>
+
+		</table>
+
+	</div>
+	<!-- Liste articles: -->
+
 	{% include "footer.html" %}
 </body>
 

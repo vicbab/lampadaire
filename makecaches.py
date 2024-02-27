@@ -47,6 +47,21 @@ def retrievejsoncache():
                         dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'versions': versions, 'contributors':contributors, 'workingVersion':workingVersion } 
                         if dictart not in articles:
                             articles.append(dictart)
+                    elif tag['name'] == config.appelTag:
+                        titledoc=article['title']
+                        idart= article['_id'] 
+                        yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        myid=re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        try:
+                            title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
+                        except:
+                            title = article['title']
+                        versions = article['versions']
+                        contributors = article['contributors']
+                        workingVersion = article['workingVersion']
+                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'versions': versions, 'contributors':contributors, 'workingVersion':workingVersion } 
+                        if dictart not in articles:
+                            articles.append(dictart)
             except:
                 print('no tags')
      
@@ -58,7 +73,9 @@ def retrievejsoncache():
 def makecaches():
     with open('caches/articles.json', 'w') as file:
         json.dump(retrievejsoncache(), file)
-        
+    with open('caches/appels.json', 'w') as file:
+        json.dump(retrievejsoncache(), file)
+
     with open('caches/keywords.json', 'w') as file:
         json.dump(setkeywords(), file)
     with open('caches/dossiers.json', 'w') as file:

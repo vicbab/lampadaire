@@ -6,6 +6,8 @@ import re
 import pypandoc
 import zipfile, io
 from slugify import slugify
+import traceback
+import os
 
 endpoint = "https://stylo.huma-num.fr/graphql"
 headers = {"Authorization": f"Bearer {config.accessToken}"}
@@ -24,7 +26,7 @@ def idfrommyid(myid):
 
     id=myid #cela permet de faire fonctionner l'application avec les id stylo. dans ce cas la fonction returnera id=myid
     if config.dynamic:
-        la = retrievetags("article")
+        la = retrievetags("both")
     else:
         la = json.load(open('caches/articles.json','r'))
     for i in la:
@@ -47,8 +49,8 @@ def idfrommyid(myid):
           for i in la:
             if i['id'] == myid:
                 data = {'data':{'article':i}}
-
     yaml = yamltojs(data['data']['article']['workingVersion']['yaml'])[0]
+    
     try:
         latestversion= data['data']['article']['versions'][0]['_id']
     except:
@@ -66,11 +68,10 @@ def getartinfofromyaml(article,key):
         value = ''
     return value
 
-
 # fonction pour récuperer le pdf via l'export stylo. Si on crée un export pour femur, on pourra avoir un template particulier et récuperer aussi l'xml
 def getpdf(article, myid, version):
-    print("getting "+article)
-    url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    print("getting "+ myid)
+    url ="http://127.0.0.1:5000/lampadaire/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
     params = {
                 "with_toc": 0,
                 "with_ascii": 0,
@@ -80,23 +81,38 @@ def getpdf(article, myid, version):
                 }
     r = requests.get(url,params)
     z = zipfile.ZipFile(io.BytesIO(r.content))
-    print(z.filelist)
     z.extractall("downloads")
+    for file in z.filelist:
+        new_file_name = f'{myid}.pdf'
+        new_file_path = f'downloads/{new_file_name}'
+        if os.path.exists(new_file_path):
+            os.remove(new_file_path)
+        os.rename(f'downloads/{file.filename}', new_file_path)
+        print(file.filename.split('/')[0])
         
-def getxml(article, myid, version):
-    print("getting "+article)
-    url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
-    params = {
-                "with_toc": 0,
-                "with_ascii": 0,
-                "version": version,
-                "bibliography_style": "chicagomodified",
-                "formats": "xml-tei-metopes-1",
-                }
-    r = requests.get(url,params)
-    z = zipfile.ZipFile(io.BytesIO(r.content))
-    print(z.filelist)
-    z.extractall("downloads")
+# def getxml(article, myid, version):
+    # try:
+    #     print("getting "+article)
+    #     url ="https://export.stylo.huma-num.fr/generique/export/stylo.huma-num.fr/"+article+"/"+myid+"/"
+    #     params = {
+    #                 "with_toc": 0,
+    #                 "with_ascii": 0,
+    #                 "version": version,
+    #                 "bibliography_style": "chicagomodified",
+    #                 "formats": "xml-tei-metopes-1",
+    #                 }
+    #     r = requests.get(url,params)
+    #     z = zipfile.ZipFile(io.BytesIO(r.content))
+    #     # print("zipfile:" + z.filelist)
+    #     z.extractall("downloads")
+    #     for file in z.filelist:
+    #         new_file_name = f'{myid}.xml'
+    #         new_file_path = f'downloads/{new_file_name}'
+    #         if os.path.exists(new_file_path):
+    #             os.remove(new_file_path)
+    #         os.rename(f'downloads/{file.filename}', new_file_path)
+    # except:
+    #     print("no xml")
 
 def retrievetags(type):
     query = """
@@ -116,80 +132,97 @@ def retrievetags(type):
     r = requests.post(endpoint, json={"query": query}, headers=headers)
     if r.status_code == 200:
         articlesdata = r.json()['data']['articles']
+
+        # tagName = ""
+        
+        skipAuthors = False
+        
+
+        tagNames = []
+
         if type == "article":
-            tagName = config.tagName
+            tagNames.append(config.tagName)
         elif type == "appel":
-            tagName = config.appelTag
+            tagNames.append(config.appelTag)
+            skipAuthors = True
+        elif type == "both":
+            tagNames.append(config.tagName)
+            tagNames.append(config.appelTag)
+            # skip = True
+
         articles=[]
         for article in articlesdata:
             try:  
                 for tag in article['tags']:
-                    if tag['name'] == tagName:
+                    if tag['name'] in tagNames:
+                        #print("found")
+                        #print(article['title'])
                         titledoc=article['title']
+
                         idart= article['_id'] 
                         yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        
                         myid=re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        
+                        
+
                         try:
                             title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
                         except:
                             title = article['title']
-                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
+
+                        
+
+                        # if "Appel" in title:
+                        #     skipAuthors = True
+
+                        if skipAuthors:
+                            display = title
+                            authors = ""
+                        else:
+                            authors = yaml['authors']
+                            display = getdisplay(authors, title)
+
+                        # authors = yaml['authors']
+                        # display = getdisplay(authors, title)
+
+                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display, 'tags':tag['name'], 'authors':authors} 
+
                         if dictart not in articles:
-                            articles.append(dictart)                    
+                            articles.append(dictart)
+
+                    # if tag['name'] == tagName or skip:
+                    #     titledoc=article['title']
+
+                    #     idart= article['_id'] 
+                    #     yaml = yamltojs(article['workingVersion']['yaml'])[0] 
+                        
+                    #     myid=re.split('_', getartinfofromyaml(article,'id'))[0]  
+                        
+                        
+
+                    #     try:
+                    #         title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
+                    #     except:
+                    #         title = article['title']
+
+                    #     authors = yaml['authors']
+                    #     display = title
+
+                    #     dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title, 'display':display} 
+
+                    #     if dictart not in articles:
+                    #         articles.append(dictart)             
             except:
+                #traceback.print_exc()
                 continue
-     
+            
+
         return articles
     else:
         raise Exception(f"Query failed to run with a {r.status_code}.")
-
-def makeAppels():
-    query = """
-    
-    {
-      
-        
-          articles{_id title workingVersion{yaml} tags{name} }
-          
-          
-        
-      }
-    
-    
-    """
-    
-    r = requests.post(endpoint, json={"query": query}, headers=headers)
-    if r.status_code == 200:
-        appelsdata = r.json()['data']['articles']
-        appelTag = config.appelTag
-        appels=[]
-        for appels in appelsdata:
-            try:  
-                for tag in article['tags']:
-                     if tag['name'] == appelTag:
-                        titledoc = article['title']
-                        idart = article['_id'] 
-                        yaml = yamltojs(article['workingVersion']['yaml'])[0] 
-                        myid = re.split('_', getartinfofromyaml(article,'id'))[0]  
-                        try:
-                            title = pypandoc.convert_text(yaml['title_f'], 'html', format='md')
-                        except:
-                            title = article['title']
-                        dictart = {"titledoc":titledoc, "id":idart, "yaml":yaml, 'myid':myid, 'title':title } 
-                        if dictart not in articles:
-                            appels.append(dictart)                   
-            except:
-                continue
-     
-        return appels
-    else:
-        raise Exception(f"Query failed to run with a {r.status_code}.")
-    
-   
-
 def retrievearticle(article):
     query = '{article(article:"'+article+'"){_id title contributors{user{displayName}} workingVersion{md yaml bib}versions{_id} }}'
-
 
     r = requests.post(endpoint, json={"query": query}, headers=headers)
     if r.status_code == 200:
@@ -198,7 +231,6 @@ def retrievearticle(article):
         return data
     else:
         raise Exception(f"Query failed to run with a {r.status_code}.")
-
 def retrievekeywords():
     key_fr=[]
     data = retrievetags("article")
@@ -223,7 +255,6 @@ def retrievekeywords():
             continue
                 
     return key_fr
-
 def retrievedossiers():
     dossiers=[]
     for article in retrievetags("article"):
@@ -231,12 +262,67 @@ def retrievedossiers():
         myid = article['myid']
         dossier = article['yaml']['dossier']
         title= article['title']
-        articles_list={'myid':myid,'id':article_id, 'title':title}
+        authors = formatnameslinks(makeauthors(article))
+        display = getdisplay(makeauthors(article), title)
+        keywords = formatkeywords(article['yaml']['keywords'])
+        try:
+            date = formatDate(article['yaml']['date'])
+        except:
+            date = ""
+       
+        # print(article['authors'])
+        articles_list={'myid':myid,'id':article_id, 'title':title, 'display':display, 'authors':authors, 'keywords':keywords, 'date':date, 'yaml':article['yaml']}
         dictdossier = {'dossier': dossier[0], 'articles': articles_list}
         dossiers.append(dictdossier)
                         
      
     return dossiers
+
+def formatkeywords(keywords):
+    keywords_list = []
+    for keyword in keywords:
+        for keyword_f in keyword['list_f']:
+            keywords_list.append(keyword_f)
+    return ', '.join(keywords_list)
+
+
+def formatDate(date):
+    date = date.split('-')
+    if len(date) == 3:
+        return date[2] + "." + date[1] + "." + date[0]
+    else:
+        return date[1] + "." + date[0]
+
+def getdisplay(authors, title):
+    authors_list = []
+    for author in authors:
+        try:
+            surname = author['author']['surname']
+        except:
+            surname = ""
+        try:
+            forname = author['author']['forname']
+        except:
+            forname = ""
+        name = forname + " " + surname
+
+        dictauthor = {'name':name}
+        authors_list.append(dictauthor)
+        
+    names = formatnames(authors_list)
+
+    return names + title
+def formatnames(authors):
+    names = " et ".join(author['name'] for author in authors)
+    names += ", "
+    return names
+
+def formatnameslinks(authors):
+    names = []
+    for author in authors:
+        name = "<a href=" + "/auteurices/{}.html>{}</a>".format(author['authorslug'], author['author']["forname"] + " " + author['author']["surname"])
+        names.append(name)
+    return ' et '.join(names) #doesnt work for 3+ authors
 
 def retrieveauthors():
     authors_list=[]
@@ -256,6 +342,25 @@ def retrieveauthors():
         except:
             continue
 
+     
+    return authors_list
+
+def makeauthors(article):
+    authors_list=[]
+    article_id = article['id']
+    myid = article['myid']
+    try:
+        authors = article['yaml']['authors']
+        for author in authors:
+            title= article['title']
+            articles_list={'myid':myid,'id':article_id, 'title':title}
+            authornslug = slugify(author['surname'])
+            authorfslug = slugify(author['forname'])
+            authorslug= authornslug+'-'+authorfslug
+            dictauthor = {'author': author, 'authorslug':authorslug, 'articles': articles_list}
+            authors_list.append(dictauthor)
+    except:
+        pass
      
     return authors_list
 
@@ -287,7 +392,6 @@ def setdossiers():
             else:
                 seen.append(d['dossier']['id'])
                 new_l.append(d['dossier'])
-
     liste_dict_dossiers= []
     for d in new_l:
         liste_sd = []        
@@ -299,8 +403,6 @@ def setdossiers():
         dictd.update({'articles':liste_sd})        
         liste_dict_dossiers.append(dictd)    
     return liste_dict_dossiers    
-
-
 def setauthors():
     authors = retrieveauthors()
     authorssorted = sorted(authors, key=lambda k: k['author']['surname']) 
@@ -310,7 +412,6 @@ def setauthors():
         if (a['author']['forname'], a['author']['surname']) not in seen: ## attention: ça marche pas s'il y a des homonimes (même nom, même prénom)
             seen.append((a['author']['forname'], a['author']['surname']))
             new_l.append(a['author'])
-
     liste_dict_authors= []
     for a in new_l:
         liste_sd = []        
@@ -321,11 +422,8 @@ def setauthors():
                 dicta.update({'authorslug': i['authorslug']})
                 try: 
                     bio = pypandoc.convert_text(i['author']['biography'], 'html', format='md') 
-                    
                         
                     a.update({'biography':bio})    
-
-
 
                 except KeyError:
                     continue
@@ -333,3 +431,21 @@ def setauthors():
         dicta.update({'articles':liste_sd})        
         liste_dict_authors.append(dicta)    
     return liste_dict_authors    
+
+def renameFiles(name, type, path):
+    print(os.listdir(path))
+    if type == "pdf":
+        extension = ".pdf"
+    elif type == "xml":
+        extension = ".xml"
+
+    old_file_name = path + name
+    new_file_name = old_file_name + extension
+    # If new_file_name exists, delete it
+    if os.path.exists(new_file_name):
+        print("deleting" + new_file_name)
+        os.remove(new_file_name)
+    # Rename file
+    if os.path.exists(old_file_name):
+        print("renaming" + old_file_name + " to " + new_file_name)
+        os.rename(old_file_name, new_file_name)

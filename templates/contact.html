@@ -2,13 +2,45 @@
 
 <head>
 	<link href="../static/css/style.css" rel="stylesheet">
+	<link rel="preconnect" href="https://rsms.me/">
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<title>{{title|striptags}}</title>
+	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
+	<div class="corps">
 	{% include "header.html" %}
 
-	<h1>contact</h1>
+	<h1>Nous contacter</h1>
 
+	{{contenu|safe}}
+
+	<!-- <div class="container" style="margin: 0px auto;">
+		<form action="https://bitqueues.com/websitecontactform/submit.php" method="post"><input type="hidden" id="fsid"
+				name="fsid" value="s5741697656214">
+			<div class="row">
+				<div class="col-25"><label for="username">Nom</label></div>
+				<div class="col-75"><input type="text" id="username" name="username" placeholder=""></div>
+			</div> <br>
+			<div class="row">
+				<div class="col-25"><label for="email">Courriel</label></div>
+				<div class="col-75"><input type="text" id="email" name="email" placeholder=""></div>
+			</div> <br>
+			<div class="row">
+				<div class="col-25"><label for="subject">Sujet</label></div>
+				<div class="col-75"><input type="text" id="subject" name="subject" placeholder=""></div>
+			</div> <br>
+			<div class="row">
+				<div class="col-25"><label for="comments">Message</label></div>
+				<div class="col-75"><input type="text" id="comments" name="comments" placeholder="" style="height:200px"></div>
+			</div> <br>
+			<div class="row"><input type="submit" value="Soumettre"></div>
+		</form>
+	</div> -->
+</div>
 	{% include "footer.html" %}
 </body>
 

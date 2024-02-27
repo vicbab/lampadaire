@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<link href="/static/css/style.css" rel="stylesheet">
+		<link href="../static/css/style.css" rel="stylesheet">
 		<link rel="preconnect" href="https://rsms.me/">
 		<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
 		<title>{{title|striptags}}</title>
@@ -11,13 +11,16 @@
 	<body>
 		<div class="corps">
 		{% include "header.html" %}
-<h1>{{mykeyword['name']}}</h1>
-<!-- Liste articles: -->
-<ul>
-{% for a in mykeyword['articles'] %}
-<li>{%if a['myid'] == ''%}<a href="../articles/{{a['id']}}.html">{%else%}<a href="../articles/{{a['myid']}}.html">{%endif%}{{a['title']|safe}}</a></li>
-{% endfor%}
-</ul></div>
-{% include "footer.html" %}
+		<div class="flex-container-contenu">
+			<div>
+				<h1 class="huger">Contribuer</h1>
+			</div>
+			<div>
+				{{contenu|safe}}
+			</div>
+		</div>
+		</div>
+		{% include "footer.html" %}
 	</body>
+	
 </html>

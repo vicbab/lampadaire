@@ -1,26 +1,43 @@
 <html>
-	<head>
-		<link href="/static/css/style.css" rel="stylesheet">
-	</head>
-	<body>
-		{% include "header.html" %}
-<h1>{{title}}</h1>
 
-<h2>Présentation</h2>
-<p>Lampadaire est la revue grand public de la Société de philosophie du Québec (SPQ). Elle publie des articles de vulgarisation philosophique dans le but d’ouvrir un espace de discussion et d’échanges au sein de la communauté philosophique du Québec et de promouvoir le travail de celle-ci auprès du grand public. Elle s’adresse à l’ensemble des individus intéressés par la recherche et l’enseignement en philosophie et par les enjeux philosophiques soulevés par la société contemporaine. Lampadaire est une revue numérique gratuite. Elle publie exclusivement des articles en français.</p>
+<head>
+	<link href="/static/css/style.css" rel="stylesheet">
+	<link rel="preconnect" href="https://rsms.me/">
+	<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+	<title>{{title|striptags}}</title>
+	<link rel="icon" type="image/png" href="../static/media/favicon.png">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
 
+<body class="bodyA">
+	<div class="accueil">
+	{% include "headerA.html" %}
+	<!-- <h1>{{title}}</h1>
+-->
+	<!-- <h2>à propos</h2> -->
+	<span class="tagline" style="text-align: left; width: 100%;">
+		Revue grand public de la <a href="https://laspq.org" target="_blank">Société de philosophie du Québec
+			(SPQ)</a>
+		</span>
+		<br><br><br><br><br>
 
-<a href="motscles/index.html">Mots-clés</a>
-<a href="dossiers/index.html">Dossiers</a>
+	<!-- <a href="motscles/index.html">Mots-clés</a>
+<a href="dossiers/index.html">Dossiers</a> -->
 
-<ul>
-{%for i in data%}
-<li>{%if i['myid'] == ''%}<a href="articles/{{i['id']}}.html">{%else%}<a href="articles/{{i['myid']}}.html">{%endif%}{{i['title']|safe}}</a></li>
+<table class="display">
+	{%for d in dossiers | reverse %}
+	{% if d['dossier']['id'][3:5] != 'ht'%}
+	<tr>
+		<td >No. {{d['dossier']['id'][0:2]}}</td>
+		<td><a href="dossiers/{{d['dossier']['id']}}.html">{{d['dossier']['title_f']}}</a></td>
+		<td>{% for a in appels %}{% if a['myid'][0:2] == d['dossier']['id'][0:2] %}{% if a['yaml']['abstract'][0]['text_f'] != "" %}{{a['yaml']['abstract'][0]['text_f'][0:300]}}{%endif%}{%endif%}{%endfor%}</td>
+		<!-- <td>{% if d['dossier']['id'][3:5] != 'aa'%}{% for a in appels %}{% if a['myid'][0:2] == d['dossier']['id'][0:2] %}{% if a['yaml']['abstract'][0]['text_f'] != "" %}{{a['yaml']['abstract'][0]['text_f'][0:300]}}{%endif%}{%endif%}{%endfor%}{%endif%}{%if d['dossier']['id'][3:5] == 'aa' %}{{""}}{%endif%}</td> -->
+	</tr>
+	{%endif%}
+	{%endfor%}
+</table>
 
-
-{%endfor%}
-</ul>
-
-{% include "footer.html" %}
-<body>
+</div>
+	{% include "footer.html" %}</body>
 </html>

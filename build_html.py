@@ -69,34 +69,34 @@ def author():
     for d in data :
         yield {'name': d['authorslug']}
 
-@freezer.register_generator
-def articlepdf():
-    print("generating pdfs")
-    dirPath = "build/downloads/"
-    # if os.path.exists(dirPath):
-    #     print("deleting " + dirPath)
-    #     os.rmdir(dirPath)
-    if config.dynamic:
-        print("dynamic: setting articles")
-        data = tools.retrievetags("both")
-    else:
-        print("static: loading articles")
-        data = json.load(open('caches/articles.json','r'))
+# @freezer.register_generator
+# def articlepdf():
+#     print("generating pdfs")
+#     dirPath = "build/downloads/"
+#     # if os.path.exists(dirPath):
+#     #     print("deleting " + dirPath)
+#     #     os.rmdir(dirPath)
+#     if config.dynamic:
+#         print("dynamic: setting articles")
+#         data = tools.retrievetags("both")
+#     else:
+#         print("static: loading articles")
+#         data = json.load(open('caches/articles.json','r'))
     
-    for article in data :
-        try:
-            if article['myid'] == '':
-                yield {'myid': article['id'] + '.pdf'}
-            else:
-                print("yielding " + article['myid'])
-                yield {'myid': article['myid']}
-            # print(os.listdir('build/downloads'))
-        except Exception as e:
-            print(f"An error occurred with{article['id']}: {e}")
-            pass
-    for article in data:
-        tools.renameFiles(article['myid'], "pdf", dirPath)
-        print(os.listdir(dirPath))
+#     for article in data :
+#         try:
+#             if article['myid'] == '':
+#                 yield {'myid': article['id'] + '.pdf'}
+#             else:
+#                 print("yielding " + article['myid'])
+#                 yield {'myid': article['myid']}
+#             # print(os.listdir('build/downloads'))
+#         except Exception as e:
+#             print(f"An error occurred with{article['id']}: {e}")
+#             pass
+#     for article in data:
+#         tools.renameFiles(article['myid'], "pdf", dirPath)
+#         print(os.listdir(dirPath))
 
 # @freezer.register_generator
 # def articlexml():
